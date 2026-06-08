@@ -1,0 +1,124 @@
+/* Hero da camera — sessao 1: caixa de presente */
+
+.panda-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  min-height: 0;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+
+
+/* Casca visual em card-material.css (.panda-hero__glass) */
+
+.panda-hero__glass {
+
+  border-radius: var(--panda-radius, 20px);
+
+}
+
+
+
+.panda-hero__camera {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+
+
+.panda-hero__camera .cam-stage--compact {
+  min-height: 0;
+  padding-top: 0.35rem;
+  overflow: visible;
+}
+
+
+
+.panda-present .panda-hero__glass {
+  overflow: visible;
+}
+
+.panda-present .panda-hero__glass:has(.cam-stage__layer--camera) {
+  overflow: visible;
+}
+
+.panda-present .panda-hero__glass:has(.cam-stage__layer--camera:not(.cam-stage__layer--camera-fired)) {
+  padding-top: 4.9rem;
+}
+
+.panda-present .panda-hero__glass:has(.cam-stage__layer--camera-fired) {
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact {
+  min-height: 0;
+  padding-top: 0.35rem;
+  overflow: visible;
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact:has(.cam-stage__layer--camera-fired) {
+  min-height: 360px;
+  padding-top: 1rem;
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact .cam-stage__stack {
+  transform: translateY(0.35rem);
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact:has(.cam-stage__layer--camera-fired) .cam-stage__stack {
+  transform: translateY(2.25rem);
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact .cam-stage__click-hint {
+  top: 8%;
+  left: -6%;
+  width: clamp(96px, 30vw, 132px);
+  transform: none;
+}
+
+.panda-present .panda-hero__camera .cam-stage--compact .cam-stage__click-label {
+  top: -126%;
+  left: 4%;
+  width: clamp(60px, 18vw, 80px);
+}
+
+
+
+.panda-hero__camera .cam-stage__layer--gift {
+
+  justify-content: flex-start;
+
+}
+
+
+
+.panda-hero__camera .gift-box--compact {
+
+  min-height: 210px;
+
+}
+
+
+
+.panda-present .polaroid-stage--embedded {
+
+  background: transparent;
+
+  min-height: 260px;
+
+  height: auto;
+
+  border: none;
+
+}
+

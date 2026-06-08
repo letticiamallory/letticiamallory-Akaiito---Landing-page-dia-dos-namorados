@@ -1,0 +1,67 @@
+{
+  "slide": {
+    "width": 3708400,
+    "height": 8039100
+  },
+  "layers": {
+    "freeform-2": {
+      "left": 0.0,
+      "top": 0.0,
+      "width": 100.17,
+      "height": 100.0,
+      "rot": 0.0
+    },
+    "freeform-3": {
+      "left": -6.56,
+      "top": 55.88,
+      "width": 109.43,
+      "height": 14.74,
+      "rot": 0.0
+    },
+    "envelope-photo": {
+      "left": 20.19,
+      "top": 27.09,
+      "width": 59.74,
+      "height": 21.53
+    },
+    "envelope-frame-bounds": {
+      "left": 20.14,
+      "top": 27.07,
+      "width": 59.89,
+      "height": 21.56
+    },
+    "freeform-7": {
+      "left": 17.04,
+      "top": 18.94,
+      "width": 65.86,
+      "height": 37.08,
+      "rot": 90.0
+    },
+    "freeform-8": {
+      "left": 56.58,
+      "top": 33.88,
+      "width": 40.07,
+      "height": 19.97,
+      "rot": 0.0
+    },
+    "textbox-9": {
+      "left": 27.4,
+      "top": 9.41,
+      "width": 47.23,
+      "height": 5.36,
+      "rot": 0.0
+    },
+    "textbox-10": {
+      "left": 9.78,
+      "top": 14.21,
+      "width": 77.55,
+      "height": 5.25,
+      "rot": 0.0
+    }
+  },
+  "viewport": {
+    "width": 3708400,
+    "height": 8199882,
+    "height_pct": 102.0
+  }
+}

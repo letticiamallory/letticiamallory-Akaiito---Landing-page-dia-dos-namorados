@@ -1,0 +1,381 @@
+.cam-stage {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 1.25rem;
+  overflow: visible;
+}
+
+.cam-stage--compact {
+  min-height: 260px;
+  padding-top: 0;
+  overflow: visible;
+}
+
+.cam-stage--compact .cam-stage__stack {
+  transform: translateY(3.25rem);
+}
+
+.cam-stage__layer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.cam-stage__layer--gift {
+  animation: cam-stage-fade-in 0.4s ease;
+}
+
+.cam-stage__layer--gift-exit {
+  animation: cam-stage-gift-exit 0.45s ease forwards;
+  pointer-events: none;
+}
+
+.cam-stage__layer--camera {
+  position: relative;
+  overflow: visible;
+  animation: cam-stage-camera-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cam-stage__layer--camera-fired {
+  animation: none;
+}
+
+/* Câmera fixa — nunca muda de tamanho (382×395) */
+.cam-stage__stack {
+  position: relative;
+  width: min(74%, 250px);
+  margin: 0 auto;
+  aspect-ratio: 382 / 395;
+  overflow: visible;
+}
+
+.cam-stage--compact .cam-stage__stack {
+  width: min(68%, 210px);
+}
+
+.cam-stage__camera-btn--front {
+  position: relative;
+  z-index: 2;
+}
+
+/* Ejeção: clip simula saída pelo slot; z-index acima da câmera opaca */
+.cam-stage__polaroid-clip {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  transition:
+    clip-path 0.85s cubic-bezier(0.22, 1, 0.28, 1),
+    z-index 0s linear 0s;
+}
+
+/* Flutuando: acima da foto que ainda está saindo */
+.cam-stage__polaroid-clip--float {
+  z-index: 4;
+  clip-path: none !important;
+}
+
+/* Fenda superior da câmera (149.7–223.4 px de 382) — refs 1–3 */
+.cam-stage__polaroid-clip--step-1 {
+  clip-path: polygon(39% 3.2%, 59% 3.2%, 59% 7.5%, 39% 7.5%);
+}
+
+.cam-stage__polaroid-clip--step-2 {
+  clip-path: polygon(38% 2%, 60% 2%, 60% 11%, 38% 11%);
+}
+
+.cam-stage__polaroid-clip--step-3 {
+  clip-path: polygon(36% 0%, 62% 0%, 62% 20%, 36% 20%);
+}
+
+.cam-stage__polaroid-clip--step-near {
+  clip-path: polygon(32% 0%, 68% 0%, 68% 36%, 32% 36%);
+}
+
+.cam-stage__polaroid-clip--step-full {
+  clip-path: polygon(28% 0%, 72% 0%, 72% 52%, 28% 52%);
+}
+
+.cam-stage__polaroid-clip--step-out {
+  clip-path: none;
+  overflow: visible;
+}
+
+.cam-stage__polaroid {
+  position: absolute;
+  aspect-ratio: 159 / 209;
+  transform: translateY(var(--cam-eject-y, 0%));
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.28, 1),
+    top 0.85s cubic-bezier(0.22, 1, 0.28, 1),
+    left 0.85s cubic-bezier(0.22, 1, 0.28, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.28, 1);
+}
+
+.cam-stage__polaroid--floating {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.28));
+}
+
+.cam-stage__polaroid--tilt-left {
+  transform: rotate(-30deg) !important;
+  transform-origin: center center;
+}
+
+.cam-stage__polaroid--tilt-right {
+  transform: rotate(45deg) !important;
+  transform-origin: center center;
+}
+
+.cam-stage__polaroid-clip--animate-in {
+  animation: cam-stage-polaroid-pop-out 0.65s cubic-bezier(0.22, 1, 0.28, 1) forwards;
+}
+
+.cam-stage__polaroid-clip--animate-in .cam-stage__polaroid {
+  animation: none;
+}
+
+.cam-stage__polaroid-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cam-stage__polaroid-window {
+  position: absolute;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.cam-stage__polaroid-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cam-stage__polaroid-photo--placeholder {
+  background: linear-gradient(145deg, #facac9 0%, #f29f9f 100%);
+}
+
+.cam-stage__polaroid-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.cam-stage__polaroid-label {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 8%;
+  margin: 0;
+  z-index: 3;
+  font-family: var(--font-caveat, "Caveat", cursive);
+  font-size: clamp(0.55rem, 3.8vw, 0.82rem);
+  line-height: 1.1;
+  color: #c52a28;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: opacity 0.5s ease;
+}
+
+.cam-stage__polaroid-label--visible {
+  opacity: 1;
+}
+
+.cam-stage__polaroid-label--full {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: unset;
+  font-size: clamp(0.62rem, 4.2vw, 0.9rem);
+  line-height: 1.15;
+  max-height: 16%;
+}
+
+.cam-stage__camera-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.cam-stage__camera-btn:disabled {
+  cursor: default;
+}
+
+.cam-stage__camera-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.38));
+  pointer-events: none;
+  user-select: none;
+}
+
+.cam-stage__camera-btn:not(:disabled):hover .cam-stage__camera-img {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+.cam-stage__camera-img--flashing {
+  animation: cam-stage-camera-pop 0.42s ease-out;
+}
+
+.cam-stage__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.cam-stage__flash--white {
+  background: #fff;
+  animation: cam-stage-flash-white 0.2s ease-out forwards;
+}
+
+.cam-stage__flash--burst {
+  background: radial-gradient(
+    ellipse 72% 58% at 50% 38%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 248, 248, 0.92) 18%,
+    rgba(255, 220, 220, 0.55) 42%,
+    rgba(255, 200, 200, 0.15) 62%,
+    transparent 78%
+  );
+  animation: cam-stage-flash-burst 0.42s ease-out forwards;
+}
+
+.cam-stage__click-hint {
+  position: absolute;
+  top: -20%;
+  left: -8%;
+  z-index: 3;
+  width: clamp(150px, 46vw, 210px);
+  pointer-events: none;
+}
+
+.cam-stage__click-arrow {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cam-stage__click-label {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: -125%;
+  width: clamp(88px, 28vw, 120px);
+  height: auto;
+  display: block;
+}
+
+.cam-stage--compact .cam-stage__click-hint {
+  top: -24%;
+  left: -12%;
+  width: clamp(130px, 42vw, 185px);
+}
+
+.cam-stage--compact .cam-stage__click-label {
+  width: clamp(80px, 26vw, 108px);
+  top: -125%;
+}
+
+.cam-stage__hint {
+  margin: 0.65rem 0 0;
+  font-family: var(--font-caveat, "Caveat", cursive);
+  font-size: 0.85rem;
+  color: rgba(255, 200, 80, 0.75);
+  animation: cam-stage-hint-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.cam-stage--compact .cam-stage__hint {
+  font-size: 0.75rem;
+}
+
+.cam-stage__hint--camera {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@keyframes cam-stage-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cam-stage-gift-exit {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.88) translateY(20px); }
+}
+
+@keyframes cam-stage-camera-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cam-stage-hint-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes cam-stage-flash-white {
+  0% { opacity: 0.92; }
+  100% { opacity: 0; }
+}
+
+@keyframes cam-stage-flash-burst {
+  0% { opacity: 0; transform: scale(0.72); }
+  18% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.18); }
+}
+
+@keyframes cam-stage-camera-pop {
+  0% {
+    filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.38)) brightness(1);
+    transform: scale(1);
+  }
+  22% {
+    filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.38)) brightness(1.65);
+    transform: scale(1.015);
+  }
+  100% {
+    filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.38)) brightness(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes cam-stage-polaroid-pop-out {
+  0% {
+    transform: translateY(18%);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,123 @@
+.music-polaroid-hang {
+  position: relative;
+  width: min(380px, 94vw);
+  margin: 0 auto 0.5rem;
+  padding-top: 0.25rem;
+  z-index: 7;
+  filter: drop-shadow(2px 6px 14px rgba(0, 0, 0, 0.28));
+}
+
+.music-polaroid-hang__line {
+  display: block;
+  width: 108%;
+  max-width: none;
+  margin: 0 auto -0.35rem;
+  margin-left: -4%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.music-polaroid-hang__row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0 0.25rem;
+}
+
+.music-polaroid {
+  position: relative;
+  width: min(46%, 168px);
+  flex-shrink: 0;
+}
+
+.music-polaroid--left {
+  transform: rotate(-7deg);
+  margin-top: 0.15rem;
+}
+
+.music-polaroid--right {
+  transform: rotate(6deg);
+  margin-top: 0.35rem;
+}
+
+.music-polaroid__frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.music-polaroid__photo {
+  position: absolute;
+  z-index: 2;
+  top: 7.5%;
+  left: 9%;
+  width: 82%;
+  height: 62%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.music-polaroid__photo--empty {
+  background: linear-gradient(145deg, #2a2a2a 0%, #111 100%);
+}
+
+.music-polaroid__caption {
+  position: absolute;
+  z-index: 3;
+  left: 8%;
+  right: 8%;
+  bottom: 5%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-dancing, var(--col-script, "Dancing Script")), cursive;
+  font-size: clamp(0.62rem, 2.8vw, 0.82rem);
+  line-height: 1.2;
+  color: #1a1008;
+  pointer-events: none;
+}
+
+.music-polaroid__deco-hearts {
+  position: absolute;
+  z-index: 4;
+  left: -18%;
+  bottom: 8%;
+  width: 42%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.music-polaroid__deco-heart {
+  position: absolute;
+  z-index: 4;
+  right: -12%;
+  bottom: 2%;
+  width: 28%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.collage-music-block {
+  position: relative;
+  width: min(380px, 94vw);
+  margin: 1.5rem auto 0 0.75rem;
+  z-index: 6;
+}
+
+.collage-music-block .collage-vinyl {
+  margin: 0.75rem auto 0;
+  width: 100%;
+}
+
+.historia-music-block {
+  margin-bottom: 1.5rem;
+}
+
+.historia-music-block .hp-music-card {
+  margin-top: 0.75rem;
+}

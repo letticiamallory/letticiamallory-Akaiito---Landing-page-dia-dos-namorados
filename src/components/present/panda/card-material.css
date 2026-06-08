@@ -1,0 +1,89 @@
+/* Casca base — scrapbook creme (todos os cards) */
+
+.panda-present {
+  --scrapbook-card-bg: #f5efe0;
+  --scrapbook-card-gradient: linear-gradient(160deg, #faf4e8 0%, #ede4d0 100%);
+  --scrapbook-card-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  --scrapbook-card-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --scrapbook-page-bg: #c52929;
+  --scrapbook-page-lines: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.04) 3px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  --scrapbook-ink: #3c140a;
+  --scrapbook-wine: #7a1515;
+  --scrapbook-muted: rgba(90, 16, 16, 0.45);
+  --panda-radius: 16px;
+  --panda-text: var(--scrapbook-ink);
+  --panda-muted: var(--scrapbook-muted);
+  --panda-card-accent: var(--scrapbook-wine);
+}
+
+.panda-present,
+.panda-present.collage-page,
+.panda-present__frame,
+.panda-present__scroll {
+  background-color: var(--scrapbook-page-bg);
+  background-image: var(--scrapbook-page-lines);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.panda-present .panda-card--dark,
+.panda-present .panda-card--project,
+.panda-present .panda-card--blue,
+.panda-present .panda-hero__glass,
+.panda-present .collage-modal {
+  position: relative;
+  overflow: hidden;
+  opacity: 1;
+  width: 100%;
+  border-radius: 16px;
+  border: none;
+  box-shadow: var(--scrapbook-card-shadow);
+  background-color: var(--scrapbook-card-bg);
+  background-image: var(--scrapbook-card-noise), var(--scrapbook-card-gradient);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  color: var(--scrapbook-ink);
+}
+
+.panda-present .panda-hero__glass {
+  overflow: visible;
+}
+
+.panda-present .panda-card--dark::before,
+.panda-present .panda-card--project::before,
+.panda-present .panda-card--blue::before,
+.panda-present .panda-hero__glass::before,
+.panda-present .panda-card--dark::after,
+.panda-present .panda-card--project::after,
+.panda-present .panda-card--blue::after,
+.panda-present .panda-hero__glass::after,
+.panda-present .collage-modal::before,
+.panda-present .collage-modal::after,
+.panda-present .panda-card--hero::before,
+.panda-present .panda-card--hero::after {
+  display: none;
+}
+
+.panda-present .panda-card--dark .panda-card__body,
+.panda-present .panda-card--project .panda-card__body,
+.panda-present .panda-card--blue .panda-card__body,
+.panda-present .panda-hero__glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 480px) {
+  .panda-present__frame {
+    background-color: var(--scrapbook-page-bg);
+    background-image: var(--scrapbook-page-lines);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
+  }
+}

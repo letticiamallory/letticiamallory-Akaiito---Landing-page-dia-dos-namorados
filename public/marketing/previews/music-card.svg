@@ -1,0 +1,19 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="393" height="852" fill="#C52929"/>
+  <rect x="56" y="280" width="280" height="292" rx="16" fill="#F5EFE0"/>
+  <rect x="76" y="300" width="240" height="160" rx="6" fill="#1A1A1A"/>
+  <rect x="76" y="300" width="240" height="160" rx="6" fill="url(#musicArt)" opacity="0.35"/>
+  <text x="196" y="388" text-anchor="middle" fill="#7A1515" font-family="Georgia, serif" font-size="28" font-style="italic">j</text>
+  <rect x="88" y="478" width="216" height="10" rx="2" fill="#7A1515" opacity="0.15"/>
+  <rect x="88" y="496" width="176" height="8" rx="2" fill="#7A1515" opacity="0.12"/>
+  <rect x="88" y="514" width="120" height="8" rx="2" fill="#7A1515" opacity="0.1"/>
+  <rect x="120" y="540" width="152" height="2" rx="1" fill="#7A1515" opacity="0.2"/>
+  <rect x="120" y="540" width="48" height="2" rx="1" fill="#7A1515"/>
+  <text x="148" y="562" fill="#7A1515" font-family="Georgia, serif" font-size="14">î  ¶  í</text>
+  <defs>
+    <linearGradient id="musicArt" x1="76" y1="300" x2="316" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EDE0C4"/>
+      <stop offset="1" stop-color="#8B4513"/>
+    </linearGradient>
+  </defs>
+</svg>

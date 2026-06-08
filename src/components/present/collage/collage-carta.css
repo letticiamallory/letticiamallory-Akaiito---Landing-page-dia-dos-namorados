@@ -1,0 +1,29 @@
+/* Carta com buquê — integração do EnvelopeAnimation na colagem */
+
+.collage-carta-zone {
+  min-height: auto;
+  margin-bottom: clamp(2rem, 8vw, 4rem);
+  overflow: visible;
+}
+
+.collage-carta-zone .envelope-gift-scene {
+  min-height: clamp(420px, 95vw, 560px);
+  color: var(--col-cream);
+}
+
+.collage-carta-zone .envelope-gift-scene--open {
+  min-height: clamp(520px, 110vw, 680px);
+}
+
+.collage-carta-zone .evnelope-wrapper {
+  max-width: min(360px, 92vw);
+}
+
+.collage-carta-zone .font-display {
+  color: var(--col-cream);
+}
+
+.collage-carta-zone .text-\[var\(--text-muted\)\],
+.collage-carta-zone .text-\[var\(--text-dim\)\] {
+  color: rgba(245, 237, 224, 0.55);
+}

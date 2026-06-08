@@ -1,0 +1,460 @@
+/* ── Scrapbook theme (Colagem) ── */
+
+.historia-page--colagem {
+  --hp-scrap-maroon: #6b1c24;
+  --hp-scrap-maroon-deep: #4a1218;
+  --hp-scrap-cream: #f4e8d8;
+  --hp-scrap-paper: #fff9f0;
+  --hp-scrap-ink: #2a1215;
+  --hp-scrap-muted: rgba(244, 232, 216, 0.75);
+  background-color: var(--hp-scrap-cream);
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.historia-page--colagem .hp-hero {
+  position: relative;
+  background: var(--hp-scrap-maroon-deep);
+}
+
+.historia-page--colagem .hp-section--scrapbook {
+  padding: 0;
+  max-width: none;
+}
+
+.historia-page--colagem .hp-footer--scrapbook {
+  padding: 0;
+  background: transparent;
+}
+
+.historia-page--colagem .hp-footer--scrapbook .hp-spread {
+  text-align: center;
+}
+
+.historia-page--colagem .hp-spread--maroon .hp-footer-brand,
+.historia-page--colagem .hp-spread--maroon .hp-footer-phrase {
+  color: var(--hp-scrap-cream);
+}
+
+.historia-page--colagem .hp-timeline-item {
+  border-left: 3px dashed var(--hp-border);
+  padding-left: 1.25rem;
+}
+
+.historia-page--colagem .hp-hero--scrapbook .hp-hero-content {
+  position: relative;
+  z-index: 3;
+  background: var(--hp-scrap-paper);
+  padding: 2rem 2.5rem;
+  max-width: 22rem;
+  margin: 0 auto;
+  transform: rotate(-2deg);
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.06),
+    0 12px 32px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(107, 28, 36, 0.08);
+}
+
+.historia-page--colagem .hp-hero--scrapbook .hp-hero-names {
+  font-size: clamp(2rem, 8vw, 3rem);
+  color: var(--hp-scrap-maroon);
+}
+
+.historia-page--colagem .hp-hero--scrapbook .hp-hero-sub {
+  font-family: var(--font-special-elite), "Special Elite", monospace;
+  font-size: 0.85rem;
+  color: var(--hp-scrap-ink);
+  opacity: 0.7;
+}
+
+.historia-page--colagem .hp-hero--scrapbook .hp-hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(74, 18, 24, 0.15) 0%,
+    rgba(74, 18, 24, 0.75) 100%
+  );
+}
+
+.historia-page--colagem .hp-section--scrapbook {
+  padding: 0;
+  max-width: none;
+}
+
+.historia-page--colagem .hp-spread {
+  position: relative;
+  padding: 4.5rem 1.5rem;
+  overflow: hidden;
+}
+
+.historia-page--colagem .hp-spread-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.historia-page--colagem .hp-spread--cream {
+  background: var(--hp-scrap-cream);
+  color: var(--hp-scrap-ink);
+  --hp-text: var(--hp-scrap-ink);
+  --hp-text-muted: #6b5344;
+  --hp-surface: var(--hp-scrap-paper);
+  --hp-border: rgba(107, 28, 36, 0.12);
+  --hp-accent: var(--hp-scrap-maroon);
+}
+
+.historia-page--colagem .hp-spread--maroon {
+  background: var(--hp-scrap-maroon);
+  color: var(--hp-scrap-cream);
+  --hp-text: var(--hp-scrap-cream);
+  --hp-text-muted: var(--hp-scrap-muted);
+  --hp-surface: rgba(255, 249, 240, 0.08);
+  --hp-border: rgba(244, 232, 216, 0.15);
+  --hp-accent: #f5d5c8;
+}
+
+.historia-page--colagem .hp-spread--maroon .hp-section-title,
+.historia-page--colagem .hp-spread--maroon .hp-section-sub {
+  color: var(--hp-scrap-cream);
+}
+
+.sb-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.sb-sticker {
+  position: absolute;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+  pointer-events: none;
+}
+
+.sb-sticker--hero-heart {
+  animation: sb-float 4s ease-in-out infinite;
+}
+
+.sb-sticker--hero-flower {
+  animation: sb-float 5s ease-in-out infinite 0.5s;
+}
+
+@keyframes sb-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+.historia-page--colagem .hp-counter-grid {
+  gap: 1rem;
+}
+
+.historia-page--colagem .hp-counter-item {
+  background: var(--hp-scrap-paper);
+  border: none;
+  transform: rotate(var(--sb-rot, -1deg));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 1.25rem 0.75rem;
+}
+
+.historia-page--colagem .hp-counter-item:nth-child(2) { --sb-rot: 2deg; }
+.historia-page--colagem .hp-counter-item:nth-child(3) { --sb-rot: -2deg; }
+.historia-page--colagem .hp-counter-item:nth-child(4) { --sb-rot: 1deg; }
+.historia-page--colagem .hp-counter-item:nth-child(5) { --sb-rot: -1.5deg; }
+.historia-page--colagem .hp-counter-item:nth-child(6) { --sb-rot: 2.5deg; }
+
+.historia-page--colagem .hp-counter-num {
+  color: var(--hp-scrap-maroon);
+  font-family: var(--font-caveat), cursive;
+  font-size: 2.5rem;
+}
+
+.historia-page--colagem .hp-timeline-card {
+  background: var(--hp-scrap-paper);
+  border: none;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  transform: rotate(var(--sb-rot, -0.5deg));
+  padding: 1.25rem 1.5rem;
+}
+
+.historia-page--colagem .hp-timeline-item:nth-child(even) .hp-timeline-card {
+  --sb-rot: 1.5deg;
+}
+
+.historia-page--colagem .hp-spread--maroon .hp-timeline-card {
+  color: var(--hp-scrap-ink);
+}
+
+.historia-page--colagem .hp-gallery {
+  columns: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.historia-page--colagem .hp-gallery-item {
+  width: min(100%, 280px);
+  break-inside: auto;
+  margin-bottom: 0;
+  padding: 10px 10px 28px;
+  background: #fff;
+  border-radius: 0;
+  transform: rotate(var(--sb-rot, -3deg));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.historia-page--colagem .hp-gallery-item::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 72px;
+  height: 22px;
+  background: rgba(245, 230, 200, 0.8);
+  border: 1px solid rgba(180, 160, 130, 0.3);
+  z-index: 2;
+}
+
+.historia-page--colagem .hp-gallery-item:nth-child(even) { --sb-rot: 4deg; }
+.historia-page--colagem .hp-gallery-item:nth-child(3n) { --sb-rot: -2deg; }
+
+.historia-page--colagem .hp-gallery-item img {
+  filter: contrast(1.05) saturate(0.92);
+  border: 2px solid var(--hp-scrap-maroon);
+  outline: 4px solid #fff;
+  outline-offset: -2px;
+}
+
+.historia-page--colagem .hp-spread--maroon .hp-gallery-item img {
+  filter: grayscale(0.35) contrast(1.08);
+}
+
+.historia-page--colagem .hp-letter {
+  background: var(--hp-scrap-paper);
+  border: 3px solid var(--hp-scrap-maroon);
+  padding: 2.5rem 2rem 2rem;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  transform: rotate(-0.5deg);
+}
+
+.historia-page--colagem .hp-letter::before {
+  content: "uma carta para você";
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--hp-scrap-maroon);
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.historia-page--colagem .hp-letter-title {
+  font-family: var(--font-caveat), cursive;
+  font-size: 2.25rem;
+  color: var(--hp-scrap-maroon);
+}
+
+.historia-page--colagem .hp-music-card {
+  background: var(--hp-scrap-paper);
+  border: 2px dashed var(--hp-scrap-maroon);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transform: rotate(0.5deg);
+}
+
+.historia-page--colagem .hp-fact-card {
+  background: var(--hp-scrap-paper);
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  transform: rotate(var(--sb-rot, -1deg));
+}
+
+.historia-page--colagem .hp-fact-card:nth-child(even) { --sb-rot: 1.5deg; }
+.historia-page--colagem .hp-spread--maroon .hp-fact-card { color: var(--hp-scrap-ink); }
+
+.historia-page--colagem .hp-footer-phrase {
+  font-family: var(--font-special-elite), "Special Elite", monospace;
+  font-size: 1.35rem;
+}
+
+.historia-page--colagem .hp-section-title {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 600;
+}
+
+.historia-page--colagem .hp-section-sub {
+  font-family: var(--font-special-elite), monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Canva frames: polaroid, paperclip, text paper ── */
+
+.sb-photo-frame {
+  width: min(100%, 260px);
+  margin: 0;
+  transform: rotate(var(--sb-rot, 0deg));
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.28));
+}
+
+.sb-photo-frame__shell {
+  position: relative;
+  width: 100%;
+}
+
+.sb-photo-frame__shell--clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sb-photo-frame__shell--clickable:hover {
+  transform: scale(1.02);
+}
+
+.sb-photo-frame__shell--clickable:focus-visible {
+  outline: 2px solid var(--hp-scrap-cream);
+  outline-offset: 4px;
+}
+
+.sb-photo-frame__photo {
+  position: absolute;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.sb-photo-frame__overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.sb-photo-frame__tape-top {
+  position: absolute;
+  top: -2%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 78%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.sb-photo-frame__caption {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-family: var(--font-caveat), cursive;
+  font-size: 1.15rem;
+  color: var(--hp-scrap-cream);
+  opacity: 0.9;
+}
+
+.historia-page--colagem .hp-gallery--scrapbook {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.75rem 1.25rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.sb-photo-frame--polaroidCompact {
+  width: min(100%, 220px);
+}
+
+.historia-page--colagem .hp-timeline-item + .hp-timeline-item {
+  margin-top: 0.25rem;
+}
+
+.historia-page--colagem .hp-timeline-item + .hp-timeline-item::before {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 1px;
+  margin: 0.5rem 0 0.75rem 1.25rem;
+  background: url("/scrapbook/elements/line-divider.svg") repeat-x center;
+  background-size: auto 1px;
+  opacity: 0.35;
+}
+
+.sb-text-paper {
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.14));
+}
+
+.sb-text-paper--scalloped {
+  min-height: 12rem;
+  padding: 2.5rem 2rem 2rem;
+}
+
+.sb-text-paper--textured {
+  min-height: 10rem;
+  padding: 2rem 1.75rem 1.75rem;
+}
+
+.sb-text-paper__content {
+  position: relative;
+  z-index: 1;
+}
+
+.historia-page--colagem .hp-hero--scrapbook .hp-hero-content {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  transform: rotate(-2deg);
+  max-width: min(22rem, 88vw);
+}
+
+.historia-page--colagem .hp-hero--scrapbook .sb-text-paper--scalloped {
+  padding: 2.75rem 2.25rem 2.25rem;
+}
+
+.historia-page--colagem .hp-letter.sb-text-paper--scalloped {
+  border: none;
+  transform: rotate(-0.5deg);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.historia-page--colagem .hp-letter.sb-text-paper--scalloped::before {
+  display: none;
+}
+
+.historia-page--colagem .hp-timeline-card.sb-text-paper--textured {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.historia-page--colagem .hp-counter-item.sb-text-paper--textured {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 1.5rem 0.75rem 1.25rem;
+  min-height: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sb-sticker--deco-bg {
+  z-index: 0 !important;
+  opacity: 0.75;
+}
+
+.sb-sticker--diary {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.22));
+}
+
+.sb-sticker--diary-bg {
+  z-index: 0 !important;
+  pointer-events: none;
+}
+

@@ -1,0 +1,326 @@
+.carta-studio {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .carta-studio {
+    grid-template-columns: minmax(280px, 340px) 1fr;
+    gap: 2.5rem 3rem;
+  }
+}
+
+.carta-studio-stage {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .carta-studio-stage {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+.carta-stage-surface {
+  background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(245, 237, 230, 0.14) 0%, transparent 55%),
+    linear-gradient(165deg, rgba(245, 237, 230, 0.08) 0%, rgba(26, 21, 26, 0.6) 100%);
+  border: 1px solid rgba(196, 168, 130, 0.22);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 420px;
+}
+
+.carta-stage-letter {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 0.5rem;
+}
+
+.carta-stage-bouquet {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  margin-top: -0.5rem;
+}
+
+.carta-stage-bouquet {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.carta-stage-bouquet .bouquet-preview-wrap {
+  width: 100%;
+  max-width: 220px;
+}
+
+.carta-stage-caption {
+  text-align: center;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.carta-studio-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.studio-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.studio-section-title {
+  font-family: var(--font-hero), Georgia, serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose-pale);
+  margin: 0;
+}
+
+.studio-section-hint {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin: -0.35rem 0 0;
+  line-height: 1.45;
+}
+
+.studio-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196, 168, 130, 0.35), transparent);
+  margin: 0;
+}
+
+.studio-names {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.studio-picker-grid {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.studio-picker-grid--envelope {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 640px) {
+  .studio-picker-grid--envelope {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.studio-picker-grid--seal {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 640px) {
+  .studio-picker-grid--seal {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.studio-picker-grid--wrapper {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 640px) {
+  .studio-picker-grid--wrapper {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.studio-picker-grid--tie {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.studio-picker-btn--wrapper {
+  min-height: 5.5rem;
+}
+
+.studio-picker-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.625rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--border2);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.studio-picker-btn:hover {
+  border-color: rgba(232, 116, 138, 0.4);
+  transform: translateY(-1px);
+}
+
+.studio-picker-btn.selected {
+  border-color: var(--rose);
+  background: rgba(196, 66, 106, 0.1);
+  box-shadow: 0 0 0 1px rgba(232, 116, 138, 0.15);
+}
+
+.studio-picker-btn span {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.studio-flowers-row {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .studio-flowers-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+.studio-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.studio-chip {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.studio-chip:hover {
+  border-color: rgba(232, 116, 138, 0.45);
+  color: var(--text);
+}
+
+.studio-chip.selected {
+  border-color: var(--rose);
+  background: rgba(196, 66, 106, 0.12);
+  color: var(--rose);
+}
+
+.studio-message {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.65;
+  min-height: 140px;
+  resize: vertical;
+}
+
+.studio-bouquet-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 480px) {
+  .studio-bouquet-gallery {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.studio-bouquet-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border-radius: 0.65rem;
+  border: 2px solid var(--border2);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.studio-bouquet-option:hover {
+  border-color: rgba(232, 116, 138, 0.4);
+}
+
+.studio-bouquet-option.selected {
+  border-color: var(--rose);
+  background: rgba(196, 66, 106, 0.1);
+}
+
+.studio-bouquet-option img {
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.studio-bouquet-option span {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.historia-carta-preview {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(245, 237, 230, 0.12) 0%, transparent 55%),
+    linear-gradient(165deg, rgba(245, 237, 230, 0.06) 0%, rgba(26, 21, 26, 0.55) 100%);
+  border: 1px solid rgba(196, 168, 130, 0.22);
+  border-radius: 1rem;
+  padding: 1.25rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.historia-carta-preview__label {
+  margin: 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.historia-carta-preview__caption {
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

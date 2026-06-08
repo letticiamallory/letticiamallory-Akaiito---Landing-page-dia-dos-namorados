@@ -1,0 +1,356 @@
+/* Story Landing — narrativa scroll do casal */
+
+.story-landing {
+  --story-pad: clamp(1rem, 4vw, 1.5rem);
+  position: relative;
+  min-height: 100vh;
+  background: #1a0505;
+}
+
+.story-landing__shell {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: var(--col-bg, #2c0a0a);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+@media (min-width: 520px) {
+  .story-landing {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .story-landing__shell {
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: calc(100vh - 5rem);
+  }
+}
+
+.story-landing__scroll {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 5rem;
+}
+
+/* —— Capítulos —— */
+.story-chapter {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-chapter--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.story-chapter__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 2.25rem var(--story-pad) 0.75rem;
+}
+
+.story-chapter__emoji {
+  font-size: 1.75rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.story-chapter__title {
+  margin: 0;
+  font-family: var(--col-script);
+  font-size: clamp(1.65rem, 6vw, 2rem);
+  font-weight: 600;
+  color: var(--col-cream);
+  line-height: 1.1;
+}
+
+.story-chapter__subtitle {
+  margin: 0.35rem 0 0;
+  font-family: var(--col-hand);
+  font-size: 0.95rem;
+  color: rgba(245, 237, 224, 0.55);
+}
+
+.story-chapter__body {
+  position: relative;
+}
+
+.story-chapter--opening {
+  padding-bottom: 0.5rem;
+}
+
+.story-chapter--opening .canva-hero.collage-zone {
+  margin-bottom: 0;
+}
+
+.story-chapter:not(.story-chapter--opening) .collage-zone {
+  margin-bottom: clamp(1.25rem, 5vw, 2rem);
+}
+
+/* Abertura — badge decorativo */
+.story-opening-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: var(--story-pad);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.story-opening-badge__emoji {
+  font-size: 1.25rem;
+  animation: story-float 4s ease-in-out infinite;
+}
+
+.story-opening-badge__line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--col-gold), transparent);
+  opacity: 0.5;
+}
+
+@keyframes story-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.story-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0 0.5rem;
+  opacity: 0.45;
+  animation: story-float 3s ease-in-out infinite;
+}
+
+.story-scroll-hint__text {
+  font-family: var(--col-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.story-scroll-hint__chevron {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+/* —— Progress lateral —— */
+.story-progress {
+  position: fixed;
+  right: max(0.5rem, calc(50% - 260px));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+@media (max-width: 519px) {
+  .story-progress {
+    right: 0.35rem;
+  }
+}
+
+.story-progress__dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 5, 5, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  opacity: 0.55;
+}
+
+.story-progress__dot:hover,
+.story-progress__dot--active {
+  opacity: 1;
+  transform: scale(1.08);
+  border-color: rgba(201, 151, 58, 0.45);
+  box-shadow: 0 0 12px rgba(196, 66, 106, 0.25);
+}
+
+.story-progress__emoji {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* —— Grid de surpresas —— */
+.story-surprises {
+  padding: 0 var(--story-pad) 1rem;
+}
+
+.story-surprises__hint {
+  font-family: var(--col-hand);
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.55;
+  margin: 0 0 1.25rem;
+}
+
+.story-surprises__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.story-surprise-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--col-cream);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(24px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+}
+
+.story-surprise-card--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.story-surprise-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+.story-surprise-card__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.story-surprise-card__preview {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.story-surprise-card__icon {
+  font-size: 2.25rem;
+}
+
+.story-surprise-card__asset {
+  width: 72%;
+  height: auto;
+  object-fit: contain;
+}
+
+.story-surprise-card__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-surprise-card__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.story-surprise-card__badge {
+  font-family: var(--col-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--col-gold);
+  margin-bottom: 0.35rem;
+}
+
+.story-surprise-card__name {
+  margin: 0;
+  font-family: var(--col-hand);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.story-surprise-card__desc {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  opacity: 0.65;
+}
+
+.story-surprise-card__cta {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--col-gold);
+}
+
+/* Share button refinado */
+.story-landing .collage-share {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  font-family: var(--col-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(20, 5, 5, 0.88);
+  color: var(--col-cream);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.story-landing .collage-share:hover {
+  border-color: var(--col-gold);
+}

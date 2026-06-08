@@ -1,0 +1,8 @@
+[
+  { "id": 0, "name": "Clássico", "file": "/chocolate/chocolates/classico.svg" },
+  { "id": 1, "name": "Coração", "file": "/chocolate/chocolates/coracao.svg" },
+  { "id": 2, "name": "Listrado", "file": "/chocolate/chocolates/listrado.svg" },
+  { "id": 3, "name": "Especial", "file": "/chocolate/chocolates/especial.svg" },
+  { "id": 4, "name": "Redondo", "file": "/chocolate/chocolates/redondo.svg" },
+  { "id": 5, "name": "Gourmet", "file": "/chocolate/chocolates/gourmet.svg" }
+]

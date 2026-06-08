@@ -1,0 +1,710 @@
+/* Landing mockups — phone viewport scaling + preview shells */
+
+.feature-phone__screen--live {
+  position: relative;
+  overflow: hidden;
+  background: #120404;
+}
+
+.feature-phone__scaled {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 393px;
+  height: 852px;
+  transform: translateX(-50%) scale(var(--phone-scale, 0.38));
+  transform-origin: top center;
+  pointer-events: auto;
+}
+
+.mockup-shell {
+  width: 393px;
+  min-height: 852px;
+  background: #c52929;
+  color: var(--scrapbook-ink, #3c140a);
+}
+
+.mockup-shell--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mockup-shell__inner {
+  width: 100%;
+  min-height: inherit;
+}
+
+.mockup-shell--pad {
+  padding: 24px 16px;
+}
+
+/* Trilha sonora — só o card de música, centralizado, fundo vermelho sólido */
+.mockup-shell--music {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--music.panda-present,
+.mockup-shell--music.panda-present.collage-page {
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--music .mockup-shell__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-shell--music .mockup-music-card-shell {
+  width: 100%;
+  margin: 0;
+}
+
+.mockup-shell--music .panda-music-card__title {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.mockup-shell--music .mockup-music-progress--static {
+  width: 12%;
+}
+
+/* Memórias — card centralizado, fundo vermelho sólido */
+.mockup-shell--memories {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--memories.panda-present,
+.mockup-shell--memories.panda-present.collage-page {
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--memories .mockup-shell__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-shell--memories .mockup-memories-card-shell {
+  width: 100%;
+  margin: 0;
+}
+
+.mockup-shell--memories .panda-gallery__moment {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Museu — card centralizado, fundo vermelho sólido */
+.mockup-shell--museum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--museum.panda-present,
+.mockup-shell--museum.panda-present.collage-page {
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--museum .mockup-shell__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-shell--museum .mockup-museum-card-shell {
+  width: 100%;
+  margin: 0;
+}
+
+.mockup-shell--museum .mockup-museum-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.mockup-shell--museum .museum-expand-btn {
+  display: none;
+}
+
+.mockup-shell--museum .museum-viewer--embedded {
+  pointer-events: none;
+}
+
+/* Bombons — card centralizado, fundo vermelho sólido */
+.mockup-shell--chocolate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--chocolate.panda-present,
+.mockup-shell--chocolate.panda-present.collage-page {
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--chocolate .mockup-shell__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-shell--chocolate .mockup-chocolate-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Flores — card centralizado, fundo vermelho sólido */
+.mockup-shell--bouquet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  padding: 0 16px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--bouquet.panda-present,
+.mockup-shell--bouquet.panda-present.collage-page {
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--bouquet .mockup-shell__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-shell--bouquet .mockup-bouquet-card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.mockup-section {
+  width: 100%;
+}
+
+.mockup-memories {
+  position: relative;
+  min-height: 520px;
+  padding: 1rem 0.5rem;
+}
+
+.mockup-memories__polaroid {
+  position: absolute;
+  width: 42%;
+  border: none;
+  padding: 0.45rem 0.45rem 1.6rem;
+  background: #faf4e8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.2s ease;
+}
+
+.mockup-memories__polaroid:hover {
+  transform: scale(1.03) rotate(var(--mockup-rot, 0deg)) !important;
+}
+
+.mockup-memories__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.05;
+  background: #ede0c4;
+  border-radius: 2px;
+}
+
+.mockup-memories__caption {
+  margin: 0.55rem 0 0;
+  font-family: var(--font-caveat, "Caveat", cursive);
+  font-size: 1.05rem;
+  color: #7a1515;
+  line-height: 1.15;
+}
+
+.mockup-memories__polaroid--1 {
+  top: 8%;
+  left: 6%;
+  --mockup-rot: -8deg;
+  transform: rotate(-8deg);
+}
+
+.mockup-memories__polaroid--2 {
+  top: 28%;
+  right: 4%;
+  --mockup-rot: 6deg;
+  transform: rotate(6deg);
+}
+
+.mockup-memories__polaroid--3 {
+  bottom: 8%;
+  left: 18%;
+  --mockup-rot: -3deg;
+  transform: rotate(-3deg);
+}
+
+.mockup-lightbox {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(20, 4, 4, 0.92);
+}
+
+.mockup-lightbox__photo {
+  width: min(280px, 88%);
+  aspect-ratio: 3 / 4;
+  background: #ede0c4;
+  border-radius: 4px;
+}
+
+.mockup-lightbox__caption {
+  margin: 0;
+  font-family: var(--font-playfair, "Playfair Display", Georgia, serif);
+  font-size: 1.1rem;
+  color: #f5efe0;
+  text-align: center;
+}
+
+.mockup-lightbox__close {
+  border: 1px solid rgba(245, 239, 224, 0.35);
+  background: transparent;
+  color: #f5efe0;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-family: var(--font-playfair, "Playfair Display", Georgia, serif);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.mockup-museum {
+  position: relative;
+  width: 100%;
+  min-height: 852px;
+  overflow: hidden;
+  background: #1a0f0a;
+}
+
+.mockup-museum__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.95;
+}
+
+.mockup-museum__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mockup-museum__frame {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.mockup-museum__frame-photo {
+  position: absolute;
+  background: #ede0c4;
+  border-radius: 2px;
+}
+
+.mockup-museum__spectator {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72%;
+  opacity: 0.92;
+}
+
+.mockup-museum__scroll-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-playfair, "Playfair Display", Georgia, serif);
+  font-size: 0.72rem;
+  color: rgba(245, 239, 224, 0.55);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.mockup-chocolate-label {
+  margin: 0;
+  font-family: var(--font-playfair, "Playfair Display", Georgia, serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+}
+
+.mockup-chocolate-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 520px;
+  padding: 1rem;
+}
+
+.mockup-chocolate-wrap .chocolate-viewer--embedded {
+  width: 100%;
+}
+
+.mockup-shell--chocolate .chocolate-open-hint,
+.mockup-shell--chocolate .chocolate-viewer-bite {
+  pointer-events: none;
+}
+
+.mockup-shell--chocolate .chocolate-open-hint {
+  display: none;
+}
+
+/* Print estático — música + polaroid com fotos já ejetadas */
+.mockup-shell--present-shot {
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+}
+
+.mockup-shell--present-shot .mockup-shell__inner {
+  height: 100%;
+  min-height: 0;
+}
+
+.mockup-present-shot__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1rem 1.5rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.mockup-shell--present-shot .panda-music-card__title {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.mockup-shell--present-shot .mockup-music-progress--static {
+  width: 12%;
+}
+
+.mockup-shell--present-shot .panda-card--hero.panda-card--full {
+  flex: 1;
+  min-height: 0;
+}
+
+.mockup-present-shot__camera-card.panda-card--hero,
+.mockup-present-shot__camera-card.panda-card--hero.panda-card--full {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.mockup-present-shot__camera-card .panda-card__body {
+  padding: 0;
+  overflow: visible;
+}
+
+.mockup-shell--present-shot .panda-hero__glass:has(.cam-stage__layer--camera-fired) {
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
+}
+
+.mockup-shell--present-shot .panda-hero__camera .cam-stage--compact:has(.cam-stage__layer--camera-fired) {
+  min-height: 360px;
+  padding-top: 1rem;
+}
+
+.mockup-shell--present-shot .panda-hero__camera .cam-stage--compact:has(.cam-stage__layer--camera-fired) .cam-stage__stack {
+  transform: translateY(2.25rem);
+}
+
+.mockup-shell--present-shot .cam-stage__click-hint,
+.mockup-shell--present-shot .cam-stage__camera-btn {
+  pointer-events: none;
+}
+
+.mockup-shell--present-shot .cam-stage__click-hint {
+  display: none;
+}
+
+.mockup-camera .cam-stage__click-hint {
+  display: none;
+}
+
+.mockup-camera .cam-stage__camera-btn {
+  pointer-events: none;
+}
+
+.mockup-camera .gift-box {
+  pointer-events: none;
+}
+
+.mockup-letter .envelope-gift-scene {
+  padding: 1rem 0.5rem 1.5rem;
+}
+
+.mockup-letter .envelope-gift-scene__hint {
+  display: none;
+}
+
+/* —— Hero / showcase shots — cartão panda + estado final (igual present-shot) —— */
+.mockup-shell--letter-shot,
+.mockup-shell--museum-shot,
+.mockup-shell--chocolate-shot {
+  height: 852px;
+  min-height: 852px;
+  max-height: 852px;
+  overflow: hidden;
+  background-color: #c52929;
+  background-image: none;
+  padding: 1rem;
+}
+
+.mockup-shell--letter-shot .mockup-shell__inner,
+.mockup-shell--museum-shot .mockup-shell__inner,
+.mockup-shell--chocolate-shot .mockup-shell__inner {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.mockup-letter-card-shell,
+.mockup-museum-card-shell,
+.mockup-chocolate-card-shell {
+  width: 100%;
+  margin: 0;
+}
+
+/* Carta aberta */
+.mockup-shell--letter-shot .love-letter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  overflow: visible;
+  text-align: center;
+}
+
+.mockup-shell--letter-shot .love-letter__hint,
+.mockup-shell--letter-shot .envelope-gift-scene__hint {
+  display: none;
+}
+
+.mockup-shell--letter-shot .envelope-gift-scene,
+.mockup-shell--letter-shot .envelope-gift-scene--open {
+  min-height: 0;
+  justify-content: flex-start;
+  padding: 0.5rem 0 0;
+  overflow: visible;
+}
+
+.mockup-shell--letter-shot .envelope-gift-scene--open {
+  min-height: min(380px, 58vh);
+}
+
+.mockup-shell--letter-shot .gift-stage--open {
+  --letter-w: clamp(8.5rem, 32vw, 10.5rem);
+  min-height: calc(min(240px, 78vw) / 1.015 + 6.5rem);
+  padding-top: 0.75rem;
+  overflow: visible;
+}
+
+.mockup-shell--letter-shot .envelope-gift-scene--open .gift-letter-slot {
+  bottom: 24%;
+}
+
+.mockup-shell--letter-shot .letter-paper--beside {
+  width: var(--letter-w, clamp(8.5rem, 32vw, 10.5rem));
+}
+
+.mockup-shell--letter-shot .envelope-gift-footer {
+  display: none;
+}
+
+.mockup-shell--letter-shot .panda-card--letter .panda-card__body {
+  padding: 1rem 0.85rem 0.75rem;
+  overflow: visible;
+}
+
+/* Museu — card creme, salão sem ampliar */
+.mockup-shell--museum-shot .panda-card--museum .panda-card__body {
+  padding: 0.85rem 0.75rem 0.65rem;
+}
+
+.mockup-shell--museum-shot .love-museum-intro {
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.mockup-shell--museum-shot .love-museum-intro__eyebrow {
+  margin: 0;
+  font-size: 0.62rem;
+}
+
+.mockup-shell--museum-shot .love-museum-intro__title {
+  margin: 0.3rem 0 0;
+  font-size: 1rem;
+}
+
+.mockup-shell--museum-shot .love-museum-intro__date {
+  margin: 0.2rem 0 0;
+  font-size: 0.68rem;
+}
+
+.mockup-shell--museum-shot .love-museum-intro__text {
+  display: none;
+}
+
+.mockup-shell--museum-shot .museum-expand-btn {
+  display: none;
+}
+
+.mockup-shell--museum-shot .love-embed--museum,
+.mockup-shell--museum-shot .hp-museu-scene {
+  margin: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.mockup-shell--museum-shot .museum-viewer--embedded {
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  min-height: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.mockup-shell--museum-shot .museum-canvas-area--fit {
+  overflow: hidden !important;
+}
+
+.mockup-shell--museum-shot .museum-canvas-stage {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Bombons — caixa aberta com mordidas */
+.mockup-shell--chocolate-shot .panda-card--project .panda-card__body {
+  padding: 0.85rem 0.65rem 0.5rem;
+}
+
+.mockup-shell--chocolate-shot .love-embed--chocolate {
+  width: 100%;
+}
+
+.mockup-shell--chocolate-shot .chocolate-viewer--embedded {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  min-height: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.mockup-shell--chocolate-shot .chocolate-viewer--embedded .chocolate-viewer-stage {
+  background: transparent;
+  padding: 0;
+  gap: 0;
+  min-height: 0;
+  justify-content: flex-start;
+}
+
+.mockup-shell--chocolate-shot .chocolate-open-hint {
+  display: none;
+}
+
+.mockup-shell--chocolate-shot .chocolate-viewer-bite {
+  pointer-events: none;
+}

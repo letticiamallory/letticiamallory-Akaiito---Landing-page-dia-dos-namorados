@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#8B1E2A" stroke-width="2" stroke-dasharray="4 3"/>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#8B1E2A" stroke-width="1"/>
+  <text x="50" y="44" text-anchor="middle" fill="#8B1E2A" font-family="Georgia, serif" font-size="8" letter-spacing="2">MADE WITH</text>
+  <text x="50" y="58" text-anchor="middle" fill="#8B1E2A" font-family="Georgia, serif" font-size="10" font-weight="bold" letter-spacing="1">LOVE</text>
+  <path d="M50 66 C44 60 38 56 38 50 C38 46 42 42 46 42 C48 42 50 44 50 46 C50 44 52 42 54 42 C58 42 62 46 62 50 C62 56 56 60 50 66Z" fill="#8B1E2A"/>
+</svg>

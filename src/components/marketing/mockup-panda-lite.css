@@ -1,0 +1,275 @@
+/* Mockup-only subset — structural styles without full panda-present.css */
+
+.mockup-shell.panda-present {
+  --panda-accent-gold: #d4a853;
+  --panda-glass-a: rgba(50, 16, 16, 0.94);
+  --panda-pad: 1rem;
+  --panda-gap: 0.5rem;
+  --panda-radius: 16px;
+  min-height: 0;
+  padding: 0;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.mockup-shell.panda-present.collage-page {
+  color: var(--panda-text);
+}
+
+.panda-card {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--panda-radius);
+  overflow: hidden;
+  opacity: 1;
+  transform: none;
+}
+
+.panda-card--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.panda-card--flush .panda-card__body {
+  padding: 0;
+}
+
+.panda-card__body {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.panda-card--dark .panda-card__body:first-child,
+.panda-card--project .panda-card__body:first-child {
+  padding-top: 1.25rem;
+}
+
+/* About */
+.panda-about__photo {
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+
+.panda-about__gold-frame {
+  position: relative;
+  width: min(100%, 350px);
+  margin: 0 auto;
+  aspect-ratio: 500 / 428;
+  overflow: hidden;
+}
+
+.panda-about__gold-frame-rotator {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% * 428 / 500);
+  aspect-ratio: 428 / 500;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.panda-about__gold-frame-photo {
+  position: absolute;
+  z-index: 1;
+  top: 11%;
+  left: 12%;
+  right: 12%;
+  bottom: 13%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.panda-about__gold-frame-photo .canva-hero__photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transform: translate(-50%, -50%) rotate(-90deg) scale(1.1);
+}
+
+.panda-about__gold-frame-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.panda-about__names {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.panda-about__since {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+}
+
+.panda-about__date {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+}
+
+.panda-about__counter {
+  margin-top: 1.25rem;
+}
+
+.panda-about__counter-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.panda-about__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+}
+
+.panda-about__cell {
+  text-align: center;
+  min-height: 4.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.panda-about__counter-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.72rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.panda-about__cell-value {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.panda-about__cell-label {
+  display: block;
+  text-transform: uppercase;
+}
+
+/* Music */
+.panda-music-card {
+  position: relative;
+  width: 100%;
+}
+
+.panda-music-card__glass {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: inherit;
+  padding: 1.15rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.panda-card--flush .panda-music-card__glass {
+  border-radius: inherit;
+}
+
+.panda-music-card__cover-wrap {
+  flex-shrink: 0;
+}
+
+.panda-music-card__meta {
+  width: 100%;
+  text-align: center;
+}
+
+.panda-music-card__title {
+  margin: 0;
+}
+
+.panda-music-card__subtitle {
+  margin: 0.25rem 0 0;
+}
+
+.panda-music-card__fill {
+  display: block;
+  height: 100%;
+  width: 12%;
+}
+
+/* Gallery */
+.panda-gallery__subtitle {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.panda-gallery__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--panda-accent-gold);
+  text-align: center;
+}
+
+.panda-gallery__moments {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  overflow: visible;
+  margin: 0;
+  padding-inline: 0;
+  padding-bottom: 0.15rem;
+}
+
+.panda-gallery__moment {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.2s ease;
+}
+
+.panda-gallery__moment-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.panda-gallery__moment-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.85rem 0.35rem 0.45rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+  pointer-events: none;
+  text-align: center;
+}
+
+.panda-gallery__hint {
+  margin: 0.85rem 0 0;
+  font-size: 0.72rem;
+  text-align: center;
+}

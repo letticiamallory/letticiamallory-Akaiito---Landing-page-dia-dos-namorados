@@ -1,0 +1,69 @@
+[
+  {
+    "id": 0,
+    "name": "classico",
+    "stages": [
+      "/chocolate/bites/classico/01-bite.svg",
+      "/chocolate/bites/classico/02-bite.svg",
+      "/chocolate/bites/classico/03-bite.svg",
+      "/chocolate/bites/classico/04-bite.svg",
+      "/chocolate/bites/classico/05-bite.svg",
+      "/chocolate/bites/classico/06-bite.svg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "coracao",
+    "stages": [
+      "/chocolate/bites/coracao/01-bite.svg",
+      "/chocolate/bites/coracao/02-bite.svg",
+      "/chocolate/bites/coracao/03-bite.svg",
+      "/chocolate/bites/coracao/04-bite.svg",
+      "/chocolate/bites/coracao/05-bite.svg"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "listrado",
+    "stages": [
+      "/chocolate/bites/listrado/01-bite.svg",
+      "/chocolate/bites/listrado/02-bite.svg",
+      "/chocolate/bites/listrado/03-bite.svg",
+      "/chocolate/bites/listrado/04-bite.svg",
+      "/chocolate/bites/listrado/05-bite.svg"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "especial",
+    "stages": [
+      "/chocolate/bites/especial/01-bite.svg",
+      "/chocolate/bites/especial/02-bite.svg",
+      "/chocolate/bites/especial/03-bite.svg",
+      "/chocolate/bites/especial/04-bite.svg",
+      "/chocolate/bites/especial/05-bite.svg"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "redondo",
+    "stages": [
+      "/chocolate/bites/redondo/01-bite.svg",
+      "/chocolate/bites/redondo/02-bite.svg",
+      "/chocolate/bites/redondo/03-bite.svg",
+      "/chocolate/bites/redondo/04-bite.svg",
+      "/chocolate/bites/redondo/05-bite.svg"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "gourmet",
+    "stages": [
+      "/chocolate/bites/gourmet/01-bite.svg",
+      "/chocolate/bites/gourmet/02-bite.svg",
+      "/chocolate/bites/gourmet/03-bite.svg",
+      "/chocolate/bites/gourmet/04-bite.svg",
+      "/chocolate/bites/gourmet/05-bite.svg"
+    ]
+  }
+]

@@ -1,0 +1,343 @@
+/**
+ * Aberto: carta + buquê em linha ACIMA do envelope (buquê maior, ao lado).
+ */
+
+.envelope-gift-scene {
+  min-height: 70vh;
+  justify-content: center;
+  overflow: visible;
+  width: 100%;
+}
+
+.envelope-gift-scene__hint {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-caveat, "Caveat", cursive);
+  font-size: clamp(1.35rem, 4.8vw, 1.65rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: #c52929;
+  text-align: center;
+}
+
+.envelope-gift-scene__recipient {
+  margin-bottom: 2rem;
+}
+
+.envelope-gift-scene--open {
+  min-height: 100dvh;
+  justify-content: center;
+  padding: 1rem 0 2rem;
+  overflow: visible;
+  width: 100%;
+}
+
+.evnelope-wrapper {
+  width: 100%;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  perspective: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.evnelope-wrapper--open {
+  max-width: min(100%, 1900px);
+  overflow: visible;
+}
+
+/*
+ * Stage: envelope centralizado; carta + buquê colados à direita da carta.
+ */
+.gift-stage {
+  --envelope-w: 280px;
+  --envelope-open-h: calc(var(--envelope-w) / 1.015);
+  --letter-w: clamp(9.75rem, 37vw, 12.5rem);
+  --gift-gap: 2rem;
+  --bouquet-w: clamp(11rem, 20.5vw, 19rem);
+  /* carta centralizada no envelope; buquê à direita com gap */
+  --letter-anchor: 50%;
+  --bouquet-left: calc(50% + var(--letter-w) / 2 + var(--gift-gap));
+  position: relative;
+  width: min(100%, 98vw);
+  max-width: 1900px;
+  min-height: var(--envelope-open-h);
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.gift-stage .evnelope {
+  position: relative;
+  z-index: 5;
+  margin: 0 auto;
+}
+
+.gift-stage:not(.gift-stage--open) .evnelope {
+  margin-top: 3.25rem;
+}
+
+/* Carta: em cima da abertura do envelope (só quando aberto) */
+.gift-letter-slot {
+  position: absolute;
+  bottom: 36%;
+  left: var(--letter-anchor);
+  transform: translateX(-50%);
+  z-index: 13;
+  pointer-events: none;
+}
+
+.gift-letter-slot .letter-paper,
+.gift-letter-slot .letter-paper__scroll {
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+.gift-stage--open .gift-letter-slot {
+  animation: gift-letter-in 0.55s 0.7s ease both;
+}
+
+/* Buquê: encostado na carta — visível fechado e aberto */
+.gift-bouquet-slot {
+  position: absolute;
+  bottom: 0%;
+  left: var(--bouquet-left);
+  width: auto;
+  max-width: var(--bouquet-w);
+  z-index: 11;
+  pointer-events: none;
+}
+
+.gift-bouquet-slot .bouquet-preview-wrap {
+  margin: 0;
+  width: auto;
+  justify-content: flex-start;
+}
+
+.gift-bouquet-slot .bouquet-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: auto;
+  max-width: none;
+}
+
+.gift-bouquet-slot .bouquet-card-img {
+  width: var(--bouquet-w);
+  height: auto;
+  aspect-ratio: 147 / 155;
+  max-height: 19.5rem;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+}
+
+.gift-stage--no-bouquet {
+  --bouquet-left: 50%;
+}
+
+.gift-stage--no-bouquet .evnelope-wrapper--open {
+  max-width: 360px;
+}
+
+@keyframes gift-letter-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* —— Envelope —— */
+.evnelope {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transform-style: preserve-3d;
+  flex-shrink: 0;
+}
+
+.evnelope.open {
+  overflow: visible;
+}
+
+.evnelope .front {
+  position: absolute;
+  pointer-events: none;
+}
+
+.evnelope .front.pocket.has-image {
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: 2;
+}
+
+.evnelope.close .front.pocket.has-image {
+  opacity: 0;
+}
+
+.evnelope.open .front.pocket.has-image {
+  opacity: 1;
+  transition: opacity 0.25s ease 0.05s;
+}
+
+.evnelope .front.pocket.has-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.evnelope .front.flap.has-image {
+  width: 100%;
+  height: 55%;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: top center;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top center;
+  backface-visibility: hidden;
+}
+
+.evnelope.open .front.flap.has-image {
+  transform: rotateX(180deg);
+  transition: transform 0.4s ease, z-index 0.6s;
+  z-index: 1;
+}
+
+.evnelope.close .front.flap.has-image {
+  transform: rotateX(0deg);
+  transition: transform 0.4s 0.6s ease, z-index 1s;
+  z-index: 5;
+}
+
+/* Carta dentro do envelope (só fechado) */
+.gift-reveal--inside {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 88%;
+  z-index: 8;
+  transform: translateX(-50%);
+  overflow: hidden;
+  max-height: 76%;
+}
+
+.letter--inside {
+  width: 100%;
+}
+
+.letter--inside .letter-body {
+  position: relative;
+  z-index: 1;
+  padding: 0.85rem 1rem;
+}
+
+.evnelope-skin-closed {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
+.evnelope.open .evnelope-skin-closed {
+  opacity: 0;
+}
+
+.evnelope-skin-closed > div:first-child img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.evnelope-wax img {
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.envelope-img-fit {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.envelope-gift-scene--compact {
+  min-height: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  width: 100%;
+}
+
+.envelope-gift-scene--compact.envelope-gift-scene--open {
+  min-height: 0;
+  padding-bottom: 1.25rem;
+}
+
+.envelope-gift-scene--compact .evnelope-wrapper.evnelope-wrapper--open {
+  max-width: min(300px, 92vw);
+  width: 100%;
+}
+
+.envelope-gift-scene--compact .gift-stage {
+  width: min(280px, 86vw);
+  max-width: 100%;
+  min-height: 0;
+}
+
+.envelope-gift-scene--compact .gift-stage--open {
+  min-height: calc(min(280px, 86vw) / 1.015);
+}
+
+.envelope-gift-scene--compact .gift-stage:not(.gift-stage--open) .evnelope {
+  margin-top: 0.5rem;
+}
+
+.envelope-gift-scene--compact .evnelope .front.pocket.has-image img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.evnelope-wax {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.25s ease;
+  z-index: 12;
+  line-height: 0;
+}
+
+.evnelope.open .evnelope-wax {
+  opacity: 0;
+}
+
+.evnelope-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
