@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Fale com o Akaiito para suporte, privacidade e dúvidas sobre presentes digitais.",
 };
 
-const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contato@akaiito.com.br";
+const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contato@dailyailab.online";
 const UPDATED_AT = "7 de junho de 2026";
 
 const TOPICS = [

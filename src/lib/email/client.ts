@@ -7,7 +7,7 @@ export function isEmailConfigured(): boolean {
 }
 
 export function getEmailFrom(): string {
-  return process.env.EMAIL_FROM?.trim() || "Akaiito <contato@akaiito.com.br>";
+  return process.env.EMAIL_FROM?.trim() || "Akaiito <contato@dailyailab.online>";
 }
 
 export function getResendClient(): Resend | null {
