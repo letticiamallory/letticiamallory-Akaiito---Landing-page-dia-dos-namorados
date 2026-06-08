@@ -10,6 +10,7 @@ import {
 import { useMuseumStore } from "@/store/museum.store";
 import { useDragOnCanvas } from "@/hooks/useDragOnCanvas";
 import { useResize } from "@/hooks/useResize";
+import { InlineSvg } from "@/components/InlineSvg";
 import { FrameInstance } from "./FrameInstance";
 import { SpectatorInstance } from "./SpectatorInstance";
 import { SelectionHandles } from "./SelectionHandles";
@@ -85,8 +86,7 @@ export function MuseumCanvas({
         } as CSSProperties}
         onClick={() => editable && selectElement(null)}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={MUSEUM_ASSETS.background} alt="" className="museum-canvas-bg" draggable={false} />
+        <InlineSvg src={MUSEUM_ASSETS.background} className="museum-canvas-bg" />
 
         {sorted.map((el) => {
           const selected = el.id === selectedId;
@@ -141,8 +141,7 @@ export function MuseumCanvas({
 
         <div className="museum-canvas-title">
           {showTitleBar && !MUSEUM_ASSETS.builtInTitleBar && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img src={MUSEUM_ASSETS.titleSection} alt="" draggable={false} />
+            <InlineSvg src={MUSEUM_ASSETS.titleSection} />
           )}
           {showTitleBar && museumDate ? (
             <span

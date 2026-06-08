@@ -1,5 +1,6 @@
 "use client";
 
+import { InlineSvg } from "@/components/InlineSvg";
 import { FRAME_DATA, SPECTATOR_DATA, getFrameDef, getSpectatorDef } from "@/data/museum-frames";
 import type { PanelDragPayload } from "@/hooks/useDragFromPanel";
 import type { MuseumElement } from "@/lib/gift-types";
@@ -50,8 +51,7 @@ export function Sidebar({
                   onTouchStart={(e) => onStartDrag(e, { type: "frame", frameIndex: frame.id, thumbSrc: frame.file })}
                   aria-label={`Quadro ${frame.id}`}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={frame.file} alt="" loading="lazy" />
+                  <InlineSvg src={frame.file} className="museum-thumb-svg" />
                 </button>
               ))}
             </div>
@@ -74,8 +74,7 @@ export function Sidebar({
                   }
                   aria-label={`Visitantes ${spec.id}`}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={spec.file} alt="" loading="lazy" />
+                  <InlineSvg src={spec.file} className="museum-thumb-svg" />
                 </button>
               ))}
             </div>
@@ -99,8 +98,7 @@ export function Sidebar({
                         onClick={() => selectElement(el.id)}
                       >
                         {thumb ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={thumb} alt="" className="museum-placed-thumb" />
+                          <InlineSvg src={thumb} className="museum-placed-thumb" />
                         ) : (
                           <span className="museum-placed-thumb museum-placed-thumb--empty" />
                         )}

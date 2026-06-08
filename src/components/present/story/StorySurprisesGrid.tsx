@@ -1,5 +1,6 @@
 "use client";
 
+import { InlineSvg } from "@/components/InlineSvg";
 import type { BuilderSection, PolaroidCameraData } from "@/lib/builder/types";
 import { getSectionCatalogItem } from "@/lib/builder/sections.catalog";
 import { useCollageReveal } from "@/hooks/useCollageReveal";
@@ -65,8 +66,7 @@ function SurpriseCard({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={previewPhoto} alt="" className="story-surprise-card__photo" />
         ) : meta.preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={meta.preview} alt="" className="story-surprise-card__asset" />
+          <InlineSvg src={meta.preview} className="story-surprise-card__asset" />
         ) : (
           <span className="story-surprise-card__icon">{catalog.icon}</span>
         )}

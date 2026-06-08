@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { MuseumElement } from "@/lib/gift-types";
+import { InlineSvg } from "@/components/InlineSvg";
 import { getFrameDef, photoPercent } from "@/data/museum-frames";
 import { uploadImageFile } from "@/lib/upload-image";
 
@@ -67,8 +68,7 @@ export function FrameInstance({
           />
         </div>
       )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={def.file} alt="" className="museum-frame-overlay" draggable={false} />
+      <InlineSvg src={def.file} className="museum-frame-overlay" />
       {uploading && (
         <div className="museum-frame-uploading" aria-hidden>
           Enviando...

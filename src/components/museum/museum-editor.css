@@ -36,6 +36,17 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.museum-sidebar-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.museum-sidebar-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
 }
 
 .museum-sidebar-header {
@@ -99,9 +110,13 @@
   border-color: var(--rose);
 }
 
-.museum-thumb img {
+.museum-thumb img,
+.museum-thumb-svg,
+.museum-thumb-svg object,
+.museum-thumb-svg svg {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: contain;
   pointer-events: none;
 }
@@ -308,15 +323,17 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.museum-canvas-bg {
+.museum-canvas-bg,
+.museum-canvas-bg object,
+.museum-canvas-bg svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  z-index: 1;
+  display: block;
   pointer-events: none;
-  image-rendering: auto;
+  z-index: 1;
+  line-height: 0;
 }
 
 .museum-canvas--embedded {
@@ -415,15 +432,18 @@
   backface-visibility: hidden;
 }
 
-.museum-frame-overlay {
+.museum-frame-overlay,
+.museum-frame-overlay object,
+.museum-frame-overlay svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  display: block;
   pointer-events: none;
   z-index: 2;
-  image-rendering: auto;
   mix-blend-mode: multiply;
+  line-height: 0;
 }
 
 .museum-frame-uploading {
@@ -473,11 +493,21 @@
   line-height: 1.3;
 }
 
-.museum-spectator-img {
+.museum-spectator-img,
+.museum-spectator-img object,
+.museum-spectator-img svg,
+.museum-placed-thumb object,
+.museum-placed-thumb svg {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  display: block;
   pointer-events: none;
+  line-height: 0;
+}
+
+.museum-spectator-img,
+.museum-spectator-img object {
+  object-fit: contain;
 }
 
 .museum-handles {

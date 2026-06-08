@@ -54,3 +54,5 @@ next-env.d.ts
 .tmp-music-pptx.zip
 .tmp-letter-pptx/
 .tmp-pptx-new.zip
+
+.vercel

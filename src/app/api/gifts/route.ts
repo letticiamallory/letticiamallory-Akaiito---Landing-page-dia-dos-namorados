@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { resolveBaseUrl } from "@/lib/base-url";
 import { createGift } from "@/lib/gifts";
 import { getProduct, type ProductId } from "@/lib/products";
 
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "E-mail inválido" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || req.nextUrl.origin;
+    const baseUrl = resolveBaseUrl(req.nextUrl.origin);
 
     const result = await createGift({
       productId,
