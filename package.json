@@ -12,7 +12,9 @@
     "db:push": "drizzle-kit push",
     "record-demo": "tsx scripts/record-demo.ts",
     "capture-hero-shots": "tsx scripts/capture-hero-screenshots.ts",
-    "optimize-svgs": "tsx scripts/optimize-svgs.ts"
+    "optimize-svgs": "tsx scripts/optimize-svgs.ts",
+    "verify-deploy": "tsx scripts/verify-deploy.ts",
+    "test": "npm run verify-deploy"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -280,7 +280,8 @@ Copie `.env.example` → `.env.local`.
 | `MERCADOPAGO_TEST_ACCESS_TOKEN` | Opcional | Token de teste usado em dev (se vazio, usa o de produção) |
 | `MERCADOPAGO_USE_SANDBOX` | Recomendado | `true` = checkout sandbox · `false` = Pix real |
 | `RESEND_API_KEY` | Para e-mail | Chave da API Resend |
-| `EMAIL_FROM` | Opcional | Remetente (domínio verificado no Resend). Default: `Akaiito <contato@akaiito.com.br>` |
+| `EMAIL_FROM` | Opcional | Remetente (domínio verificado no Resend). Use aspas se tiver espaço. Default: `Akaiito <contato@dailyailab.online>` |
+| `VERIFY_TEST_EMAIL` | Opcional | E-mail de destino para teste de envio (`npm run verify-deploy -- --send-email`) |
 
 > **Nunca** commite `.env.local` — já está no `.gitignore`.
 
@@ -358,6 +359,36 @@ Funciona em desenvolvimento local. **Não persiste na Vercel** (filesystem efêm
 1. Verifique domínio `akaiito.com.br` no Resend
 2. `RESEND_API_KEY` na Vercel
 
+### Checklist pré-deploy (local)
+
+Rode antes de importar na Vercel ou após mudar variáveis de ambiente:
+
+```bash
+npm run verify-deploy
+```
+
+O script valida:
+
+| Check | O que testa |
+|-------|-------------|
+| Variáveis de ambiente | `DATABASE_URL`, `NEXT_PUBLIC_BASE_URL`, MP, Resend |
+| Banco de dados | Conexão Postgres e tabela `gifts` |
+| Mercado Pago | Token válido + criação de preferência Pix (sandbox ou produção) |
+| Resend | Domínio do `EMAIL_FROM` verificado no painel |
+| Build | `next build` sem erros |
+
+Opções:
+
+```bash
+npm run verify-deploy -- --skip-build    # mais rápido, sem build
+npm run verify-deploy -- --send-email    # envia e-mail de teste (requer VERIFY_TEST_EMAIL)
+npm run test                             # alias de verify-deploy
+```
+
+Requisitos locais para o check de banco passar: Docker rodando (`npm run db:up`) **ou** `DATABASE_URL` apontando para Supabase.
+
+Em produção, configure as mesmas variáveis na Vercel — o script lê `.env.local` apenas na sua máquina.
+
 ### Checklist pós-deploy
 
 - [ ] Site abre em HTTPS
@@ -383,6 +414,9 @@ npm run db:push      # Drizzle push (schema)
 
 npm run record-demo          # Grava vídeo demo (Playwright)
 npm run capture-hero-shots   # Screenshots do hero (Playwright)
+npm run optimize-svgs        # Extrai imagens de SVGs grandes para WebP (*.assets/)
+npm run verify-deploy        # Verificação pré-deploy (env, DB, MP, Resend, build)
+npm run test                 # Alias de verify-deploy
 ```
 
 ---

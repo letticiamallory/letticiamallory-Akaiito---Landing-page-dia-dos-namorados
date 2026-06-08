@@ -109,12 +109,12 @@ function collectUrlsFromPresent(data: ScrapbookPresentData): {
     switch (section.sectionId) {
       case "hero_couple": {
         const hero = section.data as { backgroundPhoto?: string };
-        priority.push(hero.backgroundPhoto);
+        priority.push(...uniqueUrls([hero.backgroundPhoto]));
         break;
       }
       case "polaroid_camera": {
         const polaroid = section.data as { photos?: { url?: string }[] };
-        priority.push(...(polaroid.photos?.map((photo) => photo.url) ?? []));
+        priority.push(...uniqueUrls(polaroid.photos?.map((photo) => photo.url) ?? []));
         break;
       }
       case "favorite_song": {
@@ -123,23 +123,25 @@ function collectUrlsFromPresent(data: ScrapbookPresentData): {
           polaroidLeftPhoto?: string;
           polaroidRightPhoto?: string;
         };
-        priority.push(music.albumCover, music.polaroidLeftPhoto, music.polaroidRightPhoto);
+        priority.push(
+          ...uniqueUrls([music.albumCover, music.polaroidLeftPhoto, music.polaroidRightPhoto])
+        );
         break;
       }
       case "photo_collage": {
         const collage = section.data as { photos?: { url?: string }[] };
-        deferred.push(...(collage.photos?.map((photo) => photo.url) ?? []));
+        deferred.push(...uniqueUrls(collage.photos?.map((photo) => photo.url) ?? []));
         break;
       }
       case "museum_of_us": {
         const museum = section.data as MuseumOfUsData;
         for (const element of museum.elements ?? []) {
-          priority.push(element.photoUrl);
+          priority.push(...uniqueUrls([element.photoUrl]));
           if (element.type === "frame" && element.frameIndex) {
-            priority.push(getFrameDef(element.frameIndex)?.file);
+            priority.push(...uniqueUrls([getFrameDef(element.frameIndex)?.file]));
           }
           if (element.type === "spectator" && element.spectatorIndex) {
-            priority.push(getSpectatorDef(element.spectatorIndex)?.file);
+            priority.push(...uniqueUrls([getSpectatorDef(element.spectatorIndex)?.file]));
           }
         }
         break;
