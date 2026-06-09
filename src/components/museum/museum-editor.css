@@ -306,6 +306,13 @@
   overflow: hidden;
 }
 
+.museum-canvas-stage--editor {
+  width: 100%;
+  aspect-ratio: 1728 / 1117;
+  position: relative;
+  overflow: hidden;
+}
+
 .museum-canvas-viewport {
   width: 100%;
   height: 100%;
@@ -752,9 +759,12 @@
     flex: none;
     width: 100%;
     min-height: 0;
+    height: auto;
+    display: block;
   }
 
-  .museum-canvas-area--editor .museum-canvas-stage {
+  .museum-canvas-area--editor .museum-canvas-stage--editor {
+    aspect-ratio: 680 / 400;
     width: 100%;
     max-width: 100%;
   }
@@ -841,4 +851,97 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+.museum-editor-skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #2a1218;
+  overflow: hidden;
+}
+
+.museum-editor-skeleton__chandelier {
+  flex-shrink: 0;
+  width: 18%;
+  height: 12%;
+  margin: 4% auto 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.04) 90%
+  );
+  background-size: 200% 100%;
+  animation: museum-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.museum-editor-skeleton__frames {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6%;
+  padding: 0 8% 8%;
+  min-height: 0;
+}
+
+.museum-editor-skeleton__frame {
+  border-radius: 6px;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.14) 45%,
+    rgba(255, 255, 255, 0.05) 90%
+  );
+  background-size: 200% 100%;
+  animation: museum-skeleton-shimmer 1.4s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.museum-editor-skeleton__frame--lg {
+  width: 28%;
+  height: 72%;
+  animation-delay: 0.1s;
+}
+
+.museum-editor-skeleton__frame--md {
+  width: 32%;
+  height: 80%;
+  animation-delay: 0.25s;
+}
+
+.museum-editor-skeleton__frame--sm {
+  width: 24%;
+  height: 65%;
+  animation-delay: 0.4s;
+}
+
+.museum-editor-skeleton__floor {
+  flex-shrink: 0;
+  height: 5%;
+  background: linear-gradient(
+    110deg,
+    rgba(210, 180, 140, 0.08) 0%,
+    rgba(210, 180, 140, 0.18) 45%,
+    rgba(210, 180, 140, 0.08) 90%
+  );
+  background-size: 200% 100%;
+  animation: museum-skeleton-shimmer 1.4s ease-in-out infinite;
+  animation-delay: 0.15s;
+}
+
+@keyframes museum-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.museum-canvas-stage--editor:has(.museum-editor-skeleton) {
+  background: #2a1218;
 }

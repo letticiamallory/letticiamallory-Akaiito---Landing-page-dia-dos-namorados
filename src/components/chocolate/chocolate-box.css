@@ -1,12 +1,39 @@
 .chocolate-editor {
   display: flex;
   align-items: stretch;
-  width: 100%;
+  width: fit-content;
   max-width: 100%;
   height: auto;
   min-height: 0;
   background: #120a08;
   color: var(--text);
+}
+
+.chocolate-canvas-area--editor {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: visible;
+  background: #120a08;
+}
+
+.chocolate-canvas-stage--editor {
+  flex-shrink: 0;
+  line-height: 0;
+  overflow: visible;
+  width: auto;
+  max-width: none;
+}
+
+.chocolate-canvas-shell--fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .chocolate-sidebar {
@@ -145,25 +172,6 @@
   padding: 1rem;
   overflow: auto;
   background: radial-gradient(ellipse at center, #2a1810 0%, #120a08 70%);
-}
-
-.chocolate-canvas-area--editor {
-  flex: 1 1 auto;
-  width: 100%;
-  min-width: 0;
-  padding: 0;
-  align-items: stretch;
-  justify-content: center;
-  overflow: hidden;
-  background: #120a08;
-}
-
-.chocolate-canvas-stage--editor {
-  flex-shrink: 0;
-  line-height: 0;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
 }
 
 .chocolate-canvas-shell--embedded {
@@ -461,7 +469,19 @@
   }
 
   .chocolate-canvas-area--editor {
+    flex: none;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .chocolate-canvas-stage--editor-mobile {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 925 / 715;
+    position: relative;
+    overflow: hidden;
+    height: auto;
   }
 
   .chocolate-thumb-grid {

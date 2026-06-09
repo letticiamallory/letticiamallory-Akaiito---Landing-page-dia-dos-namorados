@@ -4,17 +4,45 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import {
   defaultFrameSize,
   defaultSpectatorSize,
+  FRAME_DATA,
   getFrameDef,
   getSpectatorDef,
+  SPECTATOR_DATA,
 } from "@/data/museum-frames";
-import { CANVAS_H, CANVAS_W, MUSEUM_ASSETS } from "@/data/museum-frames";
+import { MUSEUM_ASSETS } from "@/data/museum-frames";
 import { getCanvasFitScale } from "@/lib/museum-canvas-utils";
+import { preloadImage } from "@/lib/present-preload";
 import { useDragFromPanel, type PanelDragPayload } from "@/hooks/useDragFromPanel";
 import { useMuseumStore } from "@/store/museum.store";
 import { Sidebar } from "./Sidebar";
 import { MuseumCanvas } from "./MuseumCanvas";
 import { MuseumExpandModal } from "./MuseumExpandModal";
+import { MuseumEditorSkeleton } from "./MuseumEditorSkeleton";
 import "./museum-editor.css";
+
+function collectEditorAssetUrls(elements: ReturnType<typeof useMuseumStore.getState>["elements"]) {
+  const urls = new Set<string>([
+    MUSEUM_ASSETS.backgroundLite,
+    MUSEUM_ASSETS.background,
+    ...FRAME_DATA.map((f) => f.file),
+    ...SPECTATOR_DATA.map((s) => s.file),
+  ]);
+
+  for (const el of elements) {
+    if (el.type === "frame") {
+      if (el.photoUrl) urls.add(el.photoUrl);
+      if (el.frameIndex) {
+        const file = getFrameDef(el.frameIndex)?.file;
+        if (file) urls.add(file);
+      }
+    } else if (el.type === "spectator" && el.spectatorIndex) {
+      const file = getSpectatorDef(el.spectatorIndex)?.file;
+      if (file) urls.add(file);
+    }
+  }
+
+  return [...urls];
+}
 
 export function MuseumEditor() {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -24,8 +52,9 @@ export function MuseumEditor() {
   const [scale, setScale] = useState(1);
   const [expandedScale, setExpandedScale] = useState(1);
   const [showExpanded, setShowExpanded] = useState(false);
-  const [backgroundSrc, setBackgroundSrc] = useState(MUSEUM_ASSETS.backgroundLite);
+  const [sceneReady, setSceneReady] = useState(false);
 
+  const elements = useMuseumStore((s) => s.elements);
   const addElement = useMuseumStore((s) => s.addElement);
 
   const updateScale = useCallback(() => {
@@ -40,19 +69,37 @@ export function MuseumEditor() {
   }, [updateScale]);
 
   useEffect(() => {
-    void import("@/lib/present-preload").then(({ preloadImage }) => {
-      void preloadImage(MUSEUM_ASSETS.background).then(() => {
-        setBackgroundSrc(MUSEUM_ASSETS.background);
+    let cancelled = false;
+
+    void (async () => {
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => resolve());
       });
-    });
+      if (cancelled) return;
+
+      const urls = collectEditorAssetUrls(useMuseumStore.getState().elements);
+      await Promise.all(urls.map((url) => preloadImage(url)));
+      if (!cancelled) setSceneReady(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    if (!sceneReady) return;
+    for (const url of collectEditorAssetUrls(elements)) {
+      void preloadImage(url);
+    }
+  }, [elements, sceneReady]);
 
   useEffect(() => {
     updateScale();
     const ro = new ResizeObserver(updateScale);
     if (viewportRef.current) ro.observe(viewportRef.current);
     return () => ro.disconnect();
-  }, [updateScale]);
+  }, [updateScale, sceneReady]);
 
   const handleDrop = useCallback(
     (payload: PanelDragPayload, x: number, y: number) => {
@@ -97,35 +144,31 @@ export function MuseumEditor() {
     <div className="museum-editor">
       <Sidebar onStartDrag={startDrag} />
       <div className="museum-canvas-area museum-canvas-area--editor" ref={viewportRef}>
-        <button
-          type="button"
-          className="museum-expand-btn"
-          onClick={() => setShowExpanded(true)}
-          aria-label="Ampliar cenário do museu"
-          title="Ampliar cenário"
-        >
-          ⛶ Ampliar
-        </button>
-        <div
-          className="museum-canvas-stage"
-          style={{
-            width: "100%",
-            aspectRatio: `${CANVAS_W} / ${CANVAS_H}`,
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {!showExpanded && (
-            <MuseumCanvas
-              scale={scale}
-              embedded
-              showTitleBar
-              backgroundSrc={backgroundSrc}
-              canvasRef={canvasRef}
-              exportRef={exportRef}
-              onCancelPanelDrag={cancelDrag}
-            />
-          )}
+        {sceneReady && (
+          <button
+            type="button"
+            className="museum-expand-btn"
+            onClick={() => setShowExpanded(true)}
+            aria-label="Ampliar cenário do museu"
+            title="Ampliar cenário"
+          >
+            ⛶ Ampliar
+          </button>
+        )}
+        <div className="museum-canvas-stage museum-canvas-stage--editor">
+          {!showExpanded &&
+            (sceneReady ? (
+              <MuseumCanvas
+                scale={scale}
+                embedded
+                showTitleBar
+                canvasRef={canvasRef}
+                exportRef={exportRef}
+                onCancelPanelDrag={cancelDrag}
+              />
+            ) : (
+              <MuseumEditorSkeleton />
+            ))}
         </div>
       </div>
       {showExpanded && (

@@ -16,12 +16,15 @@ export function ChocolateCanvas({
   scale,
   editable = true,
   embedded = false,
+  fillContainer = false,
   canvasRef,
   showSlots = true,
 }: {
   scale: number;
   editable?: boolean;
   embedded?: boolean;
+  /** Preenche o stage pai (100%) — editor mobile */
+  fillContainer?: boolean;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   showSlots?: boolean;
 }) {
@@ -116,8 +119,10 @@ export function ChocolateCanvas({
     return (
       <div
         ref={canvasRef}
-        className="chocolate-canvas-shell chocolate-canvas-shell--embedded"
-        style={{ width: displayW, height: displayH }}
+        className={`chocolate-canvas-shell chocolate-canvas-shell--embedded${
+          fillContainer ? " chocolate-canvas-shell--fill" : ""
+        }`}
+        style={fillContainer ? undefined : { width: displayW, height: displayH }}
         onClick={() => editable && selectSlot(null)}
       >
         <div
