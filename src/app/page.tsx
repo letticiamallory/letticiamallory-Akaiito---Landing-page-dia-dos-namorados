@@ -100,17 +100,17 @@ export default function HomePage() {
           {[
             {
               quote:
-                "Montei o presente em minutos: escolhi as seções, coloquei nossas fotos e mandei o link. Ele(a) abriu a caixa polaroid, entrou no museu e se emocionou na carta.",
+                "Montei num domingo de noite, nem demorou. Joguei umas fotos nossas, mandei o link e pronto. Ela abriu no celular, passou pela polaroid, entrou no museuzinho e chorou na carta. Surpreendeu até quem montou.",
               author: "Rafael M. · São Paulo",
             },
             {
               quote:
-                "Parece um presente feito sob medida, não um template. Cada parte é interativa e o visual de colagem ficou incrível rolando no celular.",
+                "Não parece daqueles presentes prontos de internet. Cada parte tem uma coisinha diferente pra explorar. No celular ficou lindo rolando, parece colagem de álbum de verdade.",
               author: "Camila R. · Belo Horizonte",
             },
             {
               quote:
-                "Paguei com Pix, o link liberou na hora e eu mandei direto no WhatsApp. Sem cadastro, sem mensalidade, só o presente pronto.",
+                "Paguei no Pix, o link veio na hora. Copiei, joguei no WhatsApp e foi. Nem cadastro, nem mensalidade, só o presente, do jeito que prometeram.",
               author: "Pedro A. · Curitiba",
             },
           ].map((t, i) => (
