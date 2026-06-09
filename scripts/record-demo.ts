@@ -11,6 +11,8 @@ const DEMO_URL =
   process.env.RECORD_URL ?? "http://localhost:3000/presente/demo-preview";
 /** Duração alvo do tour interativo (após preload) */
 const TARGET_DURATION_MS = Number(process.env.RECORD_MAX_MS ?? 64_000);
+const SKIP_WARMUP = process.env.RECORD_SKIP_WARMUP !== "0";
+const log = (step: string) => console.log(`[record-demo] ${step}`);
 
 const HIDE_DEV_UI_CSS = `
   nextjs-portal,
@@ -88,6 +90,7 @@ async function blockHeavyMedia(page: Page) {
 }
 
 async function recordDemo() {
+  log("iniciando navegador");
   const browser = await chromium.launch({
     headless: true,
     args: [
@@ -97,7 +100,10 @@ async function recordDemo() {
     ],
   });
 
-  await warmupPage(browser);
+  if (!SKIP_WARMUP) {
+    log("warmup da página");
+    await warmupPage(browser);
+  }
 
   const context = await browser.newContext({
     viewport: { width: 393, height: 852 },
@@ -113,11 +119,13 @@ async function recordDemo() {
   page.setDefaultTimeout(45_000);
   await blockHeavyMedia(page);
 
-  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForSelector(".panda-present", { timeout: 60_000 });
+  log("abrindo presente demo");
+  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 90_000 });
+  await page.waitForSelector(".panda-present", { timeout: 90_000 });
   await hideDevUi(page);
   await waitForCriticalAssets(page);
   await waitForPresentPreload(page);
+  log("preload pronto — gravando tour");
 
   await page.addStyleTag({
     content: `
@@ -224,6 +232,7 @@ async function recordDemo() {
   await wait(1200);
 
   // 1 — Música: toca desde o início (~7s)
+  log("música");
   await scrollToCardById("music");
   await wait(600);
   await page
@@ -253,10 +262,15 @@ async function recordDemo() {
   await wait(5800);
 
   // 4 — Memórias: abre galeria e navega (~7s)
+  log("memórias");
   await scrollToCardById("memories");
   await wait(500);
   await clickLocator("#card-memories .panda-gallery__moment");
-  await page.locator(".photo-stories").first().waitFor({ state: "visible", timeout: 8000 });
+  await page
+    .locator(".photo-stories")
+    .first()
+    .waitFor({ state: "visible", timeout: 8000 })
+    .catch(() => undefined);
   await wait(1800);
   await clickLocator(".photo-stories__tap--next");
   await wait(1500);
@@ -271,6 +285,7 @@ async function recordDemo() {
   await wait(3200);
 
   // 6 — Bombons: abre a caixa e morde 2 (~6s)
+  log("bombons");
   await scrollToCardById("project_chocolate");
   await wait(500);
   await clickRole(/abrir caixa de chocolates/i, "#card-project_chocolate");
@@ -290,6 +305,7 @@ async function recordDemo() {
   await wait(4800);
 
   // 8 — Carta: abre o envelope (~7s)
+  log("carta");
   await scrollToCardById("letter");
   await wait(500);
   await clickLocator("#card-letter .evnelope-hit");
@@ -301,10 +317,13 @@ async function recordDemo() {
   await wait(6200);
 
   // 9 — Despedida — segura até completar ~1 min de tour
+  log("final");
   await scrollToCardById("forever");
   await holdUntilTarget(3000);
 
+  log("finalizando vídeo");
   const video = page.video();
+  await page.close();
   await context.close();
   await browser.close();
 
@@ -337,7 +356,7 @@ async function recordDemo() {
 async function warmupPage(browser: Browser) {
   const page = await browser.newPage();
   await blockHeavyMedia(page);
-  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 45_000 });
+  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 90_000 });
   await page.waitForSelector(".panda-present", { timeout: 45_000 });
   await hideDevUi(page);
   await waitForCriticalAssets(page);

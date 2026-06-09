@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   defaultFrameSize,
   defaultSpectatorSize,
   getFrameDef,
   getSpectatorDef,
 } from "@/data/museum-frames";
-import { CANVAS_H, CANVAS_W } from "@/data/museum-frames";
+import { CANVAS_H, CANVAS_W, MUSEUM_ASSETS } from "@/data/museum-frames";
 import { getCanvasFitScale } from "@/lib/museum-canvas-utils";
 import { useDragFromPanel, type PanelDragPayload } from "@/hooks/useDragFromPanel";
 import { useMuseumStore } from "@/store/museum.store";
@@ -21,16 +21,30 @@ export function MuseumEditor() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const expandedCanvasRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.5);
+  const [scale, setScale] = useState(1);
   const [expandedScale, setExpandedScale] = useState(1);
   const [showExpanded, setShowExpanded] = useState(false);
+  const [backgroundSrc, setBackgroundSrc] = useState(MUSEUM_ASSETS.backgroundLite);
 
   const addElement = useMuseumStore((s) => s.addElement);
 
   const updateScale = useCallback(() => {
     const vp = viewportRef.current;
     if (!vp) return;
-    setScale(getCanvasFitScale(vp.clientWidth));
+    const next = getCanvasFitScale(vp.clientWidth);
+    if (next > 0) setScale(next);
+  }, []);
+
+  useLayoutEffect(() => {
+    updateScale();
+  }, [updateScale]);
+
+  useEffect(() => {
+    void import("@/lib/present-preload").then(({ preloadImage }) => {
+      void preloadImage(MUSEUM_ASSETS.background).then(() => {
+        setBackgroundSrc(MUSEUM_ASSETS.background);
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -106,6 +120,7 @@ export function MuseumEditor() {
               scale={scale}
               embedded
               showTitleBar
+              backgroundSrc={backgroundSrc}
               canvasRef={canvasRef}
               exportRef={exportRef}
               onCancelPanelDrag={cancelDrag}

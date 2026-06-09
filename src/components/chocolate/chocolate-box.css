@@ -1,7 +1,7 @@
 .chocolate-editor {
   display: flex;
   align-items: stretch;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   height: auto;
   min-height: 0;
@@ -148,22 +148,22 @@
 }
 
 .chocolate-canvas-area--editor {
-  flex: 0 0 auto;
-  width: auto;
+  flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
   padding: 0;
   align-items: stretch;
-  justify-content: flex-start;
-  overflow: visible;
+  justify-content: center;
+  overflow: hidden;
   background: #120a08;
 }
 
 .chocolate-canvas-stage--editor {
   flex-shrink: 0;
   line-height: 0;
-  overflow: visible;
-  width: auto;
-  max-width: none;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .chocolate-canvas-shell--embedded {
@@ -457,7 +457,7 @@
   .chocolate-sidebar-inner {
     position: relative;
     inset: auto;
-    max-height: 240px;
+    max-height: 220px;
   }
 
   .chocolate-canvas-area--editor {

@@ -20,6 +20,7 @@ export function MuseumCanvas({
   editable = true,
   embedded = false,
   showTitleBar = true,
+  backgroundSrc = MUSEUM_ASSETS.background,
   canvasRef,
   exportRef,
   onCancelPanelDrag,
@@ -28,6 +29,8 @@ export function MuseumCanvas({
   editable?: boolean;
   embedded?: boolean;
   showTitleBar?: boolean;
+  /** Fundo do salão — use backgroundLite no editor para carregar mais rápido */
+  backgroundSrc?: string;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   exportRef?: React.RefObject<HTMLDivElement | null>;
   onCancelPanelDrag?: () => void;
@@ -87,7 +90,7 @@ export function MuseumCanvas({
         }}
         onClick={() => editable && selectElement(null)}
       >
-        <InlineSvg src={MUSEUM_ASSETS.background} className="museum-canvas-bg" />
+        <InlineSvg src={backgroundSrc} className="museum-canvas-bg" />
 
         {sorted.map((el) => {
           const selected = el.id === selectedId;
@@ -123,6 +126,7 @@ export function MuseumCanvas({
                 <FrameInstance
                   element={el}
                   editable={editable}
+                  selected={selected}
                   onPhotoChange={(url) => updateElement(el.id, { photoUrl: url })}
                 />
               ) : (

@@ -463,6 +463,32 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   pointer-events: none;
+  text-align: center;
+  padding: 0.35rem;
+  line-height: 1.3;
+}
+
+.museum-frame-uploading--error {
+  background: rgba(80, 10, 20, 0.82);
+  font-size: 0.55rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.museum-frame-tap-hint {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.48em;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .museum-frame-label {
@@ -701,6 +727,7 @@
     flex-direction: column;
     height: auto;
     min-height: 0;
+    width: 100%;
   }
 
   .museum-sidebar {
@@ -717,17 +744,30 @@
   .museum-sidebar-inner {
     position: relative;
     inset: auto;
-    max-height: 240px;
+    max-height: 220px;
     border-right: none;
   }
 
   .museum-canvas-area--editor {
     flex: none;
     width: 100%;
+    min-height: 0;
+  }
+
+  .museum-canvas-area--editor .museum-canvas-stage {
+    width: 100%;
+    max-width: 100%;
   }
 
   .museum-thumb-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .museum-expand-btn {
+    top: 0.45rem;
+    right: 0.45rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.72rem;
   }
 }
 

@@ -1,8 +1,11 @@
+import { compressImageFile } from "@/lib/compress-image";
+
 export async function uploadImageFile(file: File): Promise<string> {
+  const compressed = await compressImageFile(file);
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", compressed);
   const res = await fetch("/api/upload", { method: "POST", body: formData });
-  const data = await res.json();
+  const data = (await res.json()) as { url?: string; error?: string };
   if (!res.ok || !data.url) {
     throw new Error(data.error || "Não foi possível enviar a foto.");
   }

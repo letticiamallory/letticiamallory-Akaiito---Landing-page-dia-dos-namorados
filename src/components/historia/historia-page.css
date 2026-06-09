@@ -614,13 +614,14 @@
 .historia-module-editor-wrap .chocolate-editor {
   min-height: 0;
   height: auto;
+  width: 100%;
 }
 
 .historia-module-editor-wrap:has(.chocolate-editor) {
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   margin-inline: auto;
-  overflow: visible;
+  overflow: hidden;
 }
 .hp-museu-module,
 .hp-chocolates-module {

@@ -4,6 +4,8 @@ export const CANVAS_H = 1117;
 export const MUSEUM_ASSETS = {
   /** Cenário completo — Museum of Us.svg; placa com título personalizável */
   background: "/museum/museum-of-us.svg",
+  /** Raster leve (~4 KB) — editor no celular; SVG completo fica no presente */
+  backgroundLite: "/museum/museum-of-us-preview.jpg",
   titleSection: "/museum/title-section.svg",
   artworkLabel: "/museum/artwork-label.svg",
   /** Placa já vem no SVG; só o texto é sobreposto */

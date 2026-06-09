@@ -94,7 +94,7 @@ export function HistoriaMuseuControls({
       />
       <p className="text-sm leading-relaxed text-[var(--text-muted)]">
         O título e a data aparecem na placa do salão. Arraste quadros para personalizar. Pessoas são opcionais.
-        Duplo clique no quadro à direita para adicionar foto. Use &quot;Ampliar&quot; para ver o salão em tela cheia.
+        Duplo clique no quadro (ou toque no celular) para adicionar foto. Use &quot;Ampliar&quot; para ver o salão em tela cheia.
         Clique no quadro e use × para excluir, ou exclua pela lista &quot;No salão&quot; ao lado.
       </p>
       <div className="historia-module-editor-wrap historia-module-editor-wrap--museum rounded-xl border border-[var(--border2)]">
