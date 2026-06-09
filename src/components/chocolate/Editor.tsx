@@ -20,7 +20,18 @@ function readEditorScale(stage: HTMLDivElement | null) {
 export function ChocolateEditor() {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches
+  );
   const [scale, setScale] = useState(EDITOR_SCALE);
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_MQ);
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const updateScale = useCallback(() => {
     const next = readEditorScale(stageRef.current);
@@ -60,12 +71,14 @@ export function ChocolateEditor() {
     <div className="chocolate-editor">
       <ChocolateSidebar onStartDrag={startDrag} />
       <div className="chocolate-canvas-area chocolate-canvas-area--editor">
-        <div
-          ref={stageRef}
-          className="chocolate-canvas-stage chocolate-canvas-stage--editor"
-          style={{ "--chocolate-editor-scale": scale } as React.CSSProperties}
-        >
-          <ChocolateCanvas scale={scale} embedded editorSlot canvasRef={canvasRef} />
+        <div ref={stageRef} className="chocolate-canvas-stage chocolate-canvas-stage--editor">
+          <ChocolateCanvas
+            scale={scale}
+            embedded
+            editorSlot
+            mobileScaleViaCss={isMobile}
+            canvasRef={canvasRef}
+          />
         </div>
       </div>
     </div>
