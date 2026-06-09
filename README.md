@@ -18,6 +18,8 @@ Plataforma de presentes digitais personalizados para casais. O usuário monta um
 - [Variáveis de ambiente](#variáveis-de-ambiente)
 - [Integrações](#integrações)
 - [Deploy (Vercel + Supabase)](#deploy-vercel--supabase)
+- [Testes](#testes)
+- [Alterações recentes](#alterações-recentes)
 - [Scripts úteis](#scripts-úteis)
 - [Limitações conhecidas](#limitações-conhecidas)
 
@@ -338,9 +340,12 @@ Funciona em desenvolvimento local. **Não persiste na Vercel** (filesystem efêm
 
 1. Importe o repositório em [vercel.com](https://vercel.com)
 2. Framework: Next.js (auto-detectado)
-3. Em **Settings → Environment Variables**, configure todas as variáveis da tabela acima
-4. `NEXT_PUBLIC_BASE_URL` = `https://akaiito.com.br` (HTTPS obrigatório)
-5. Deploy
+3. **Settings → Git → ative Git Large File Storage (LFS)** — obrigatório para os SVGs do museu e o vídeo demo
+4. Em **Settings → Environment Variables**, configure todas as variáveis da tabela acima
+5. `NEXT_PUBLIC_BASE_URL` = `https://akaiito.com.br` (HTTPS obrigatório)
+6. Deploy e **redeploy** após ligar o LFS
+
+> Sem LFS na Vercel, arquivos como `/museum/frame-1.svg` são servidos como ponteiros de ~132 bytes e o museu fica quebrado em produção. Valide com `npm run test:e2e -- e2e/production-smoke.spec.ts` apontando para a URL da Vercel.
 
 ### 3. Domínio
 
@@ -361,33 +366,14 @@ Funciona em desenvolvimento local. **Não persiste na Vercel** (filesystem efêm
 
 ### Checklist pré-deploy (local)
 
-Rode antes de importar na Vercel ou após mudar variáveis de ambiente:
+Ver seção [Testes](#testes). Resumo:
 
 ```bash
-npm run verify-deploy
+npm run verify-deploy              # integrações + build
+npm run test:e2e                   # fluxos ponta a ponta (com dev + banco rodando)
 ```
 
-O script valida:
-
-| Check | O que testa |
-|-------|-------------|
-| Variáveis de ambiente | `DATABASE_URL`, `NEXT_PUBLIC_BASE_URL`, MP, Resend |
-| Banco de dados | Conexão Postgres e tabela `gifts` |
-| Mercado Pago | Token válido + criação de preferência Pix (sandbox ou produção) |
-| Resend | Domínio do `EMAIL_FROM` verificado no painel |
-| Build | `next build` sem erros |
-
-Opções:
-
-```bash
-npm run verify-deploy -- --skip-build    # mais rápido, sem build
-npm run verify-deploy -- --send-email    # envia e-mail de teste (requer VERIFY_TEST_EMAIL)
-npm run test                             # alias de verify-deploy
-```
-
-Requisitos locais para o check de banco passar: Docker rodando (`npm run db:up`) **ou** `DATABASE_URL` apontando para Supabase.
-
-Em produção, configure as mesmas variáveis na Vercel — o script lê `.env.local` apenas na sua máquina.
+Requisitos: Docker (`npm run db:up`) ou `DATABASE_URL` do Supabase · `npm run dev` para E2E.
 
 ### Checklist pós-deploy
 
@@ -397,6 +383,111 @@ Em produção, configure as mesmas variáveis na Vercel — o script lê `.env.l
 - [ ] E-mail recebido com o link
 - [ ] `/presente/[slug]` renderiza corretamente
 - [ ] Webhook confirma sem intervenção manual
+
+---
+
+## Testes
+
+O projeto tem dois níveis de verificação: **smoke pré-deploy** (integrações) e **E2E** (fluxos completos no navegador).
+
+### Verificação pré-deploy (`verify-deploy`)
+
+```bash
+npm run verify-deploy              # env + banco + MP + Resend + build
+npm run verify-deploy -- --skip-build
+npm run verify-deploy -- --send-email   # testa envio Resend (VERIFY_TEST_EMAIL)
+npm run test                       # alias de verify-deploy
+```
+
+| Check | O que valida |
+|-------|----------------|
+| Variáveis | `DATABASE_URL`, `NEXT_PUBLIC_BASE_URL`, MP, Resend |
+| Banco | Conexão Postgres e tabela `gifts` |
+| Mercado Pago | Token + criação de preferência Pix |
+| Resend | Domínio do `EMAIL_FROM` verificado |
+| Build | `next build` (opcional com `--skip-build`) |
+
+### Testes E2E (Playwright)
+
+```bash
+npm run db:up          # Postgres na porta 5433
+npm run dev            # terminal 1 — http://localhost:3000
+npm run test:e2e       # terminal 2
+npm run test:e2e:ui    # interface visual do Playwright
+npm run test:all       # verify-deploy (sem build) + test:e2e
+```
+
+Configuração em `playwright.config.ts`. Specs em `e2e/`:
+
+| Arquivo | Cobertura |
+|---------|-----------|
+| `api.spec.ts` | CRUD gifts, confirmação demo, webhook MP, upload, metadados de música |
+| `flow-purchase.spec.ts` | Compra → pagamento → obrigado → presente; builder; pré-carregamento |
+| `present-demo.spec.ts` | `/presente/demo-preview`: cards, museu, assets, LFS, carta, contador |
+| `present-interactions.spec.ts` | Envelope, bombons, museu ampliado, galeria, música, câmera |
+| `marketing.spec.ts` | Landing, preço, FAQ, footer |
+| `legal-and-redirects.spec.ts` | Termos, privacidade, contato, redirects `/criar/*` |
+| `production-smoke.spec.ts` | Smoke na URL de produção (só roda com `PLAYWRIGHT_BASE_URL` externo) |
+
+**Smoke na Vercel** (valida LFS e páginas ao vivo):
+
+```bash
+PLAYWRIGHT_BASE_URL=https://seu-projeto.vercel.app npm run test:e2e -- e2e/production-smoke.spec.ts
+```
+
+**Comportamento esperado:**
+
+- Com token do Mercado Pago no `.env.local`, o teste de checkout completo via preview é **pulado** (redireciona ao MP real). Os fluxos `pagamento?demo=1` e API continuam passando.
+- Testes de produção são **pulados** localmente até você definir `PLAYWRIGHT_BASE_URL`.
+
+**Última execução documentada (desktop, jun/2026):**
+
+| Comando | Resultado |
+|---------|-----------|
+| `npm run verify-deploy -- --skip-build` | ✓ 4 ok · ! 1 aviso · ✗ 0 falhas |
+| `npm run test:e2e -- --project=desktop` | ✓ **48 passed** · **4 skipped** · ✗ 0 falhas (~6 min) |
+
+Os 4 skipped: checkout via preview (token MP ativo) + 3 smokes de produção (sem `PLAYWRIGHT_BASE_URL`).
+
+---
+
+## Alterações recentes
+
+Resumo das mudanças principais desta fase do projeto (presente embutido, deploy e qualidade).
+
+### Museu de Nós
+
+- Restaurado o fluxo original `HistoriaMuseuSection` → `MuseumViewer` (canvas 1728×1117) no presente embutido.
+- `InlineSvg` passou de `<object>` para `<img>` — SVGs com WebP embutido não quebram dentro de canvas com `scale()`.
+- `MuseumViewer` pré-carrega fundo, molduras, fotos e espectadores antes de exibir a cena.
+- Assets do museu em `public/museum/` versionados via **Git LFS** (`.gitattributes`).
+
+### Carta de amor
+
+- `openSrc` dos envelopes aponta para `.webp` (não `.svg` com assets externos que falhavam no `<img>`).
+- Envelope fechado some corretamente ao abrir (`visibility` + z-index).
+
+### Barra de música
+
+- Polling do YouTube a cada 200 ms para a barra acompanhar a reprodução.
+- Tempos posicionados acima da barra de progresso.
+
+### Presente demo e marketing
+
+- `/presente/demo-preview` — presente estático para preview e gravação de demo (`src/data/demo-present.ts`).
+- Páginas legais: `/termos`, `/privacidade`, `/contato`.
+- Componentes de mockup/marketing para a landing (hero, museu, buquê, etc.).
+
+### Deploy e assets
+
+- Git LFS para `public/museum/*.svg` e `public/assets/demo/*.webm`.
+- Na Vercel: **Settings → Git → Git LFS** + redeploy (ver [Deploy](#deploy-vercel--supabase)).
+- Script `npm run verify-deploy` para validar env, banco, MP, Resend e build antes do deploy.
+
+### Testes automatizados (novo)
+
+- Suíte Playwright em `e2e/` — 52 testes cobrindo API, compra, liberação do presente, carregamento e interações.
+- Helpers reutilizáveis: `e2e/helpers/present.ts`, `gift-api.ts`, `fixtures/builder-state.ts`.
 
 ---
 
@@ -415,8 +506,11 @@ npm run db:push      # Drizzle push (schema)
 npm run record-demo          # Grava vídeo demo (Playwright)
 npm run capture-hero-shots   # Screenshots do hero (Playwright)
 npm run optimize-svgs        # Extrai imagens de SVGs grandes para WebP (*.assets/)
-npm run verify-deploy        # Verificação pré-deploy (env, DB, MP, Resend, build)
+npm run verify-deploy        # Verificação pré-deploy
 npm run test                 # Alias de verify-deploy
+npm run test:e2e             # Testes ponta a ponta (Playwright)
+npm run test:e2e:ui          # Playwright com interface visual
+npm run test:all             # verify-deploy (sem build) + test:e2e
 ```
 
 ---
@@ -444,6 +538,10 @@ O token atual pode ser de **conta de teste** do MP (`TESTUSER...`). Nesse caso:
 ### Preload de assets
 
 Câmera polaroid e museu carregam muitos SVGs e fotos. O sistema pré-carrega assets no checkout e na página de pagamento, mas quem abre o link frio (destinatário no WhatsApp) ainda depende do preload na própria página do presente.
+
+### Git LFS na Vercel
+
+SVGs do museu (1–4 MB cada) ficam no Git LFS. Se o LFS não estiver ativado no projeto Vercel, o deploy serve ponteiros de ~132 bytes em vez dos arquivos reais — o museu aparece vazio em produção. Ative em **Settings → Git** e faça redeploy.
 
 ### Produtos legados
 

@@ -4,27 +4,87 @@ import { execSync } from "node:child_process";
 import { chromium, type Browser, type Page } from "playwright";
 
 const OUTPUT_DIR = "public/assets/demo";
-const OUTPUT_WEBM = path.join(OUTPUT_DIR, "presente-demo.webm");
-const OUTPUT_MP4 = path.join(OUTPUT_DIR, "presente-demo.mp4");
+const OUTPUT_BASENAME = process.env.RECORD_BASENAME ?? "presente-letticia-joao";
+const OUTPUT_WEBM = path.join(OUTPUT_DIR, `${OUTPUT_BASENAME}.webm`);
+const OUTPUT_MP4 = path.join(OUTPUT_DIR, `${OUTPUT_BASENAME}.mp4`);
 const DEMO_URL =
   process.env.RECORD_URL ?? "http://localhost:3000/presente/demo-preview";
-const MAX_DURATION_MS = 95_000;
+/** Duração alvo do tour interativo (após preload) */
+const TARGET_DURATION_MS = Number(process.env.RECORD_MAX_MS ?? 64_000);
 
 const HIDE_DEV_UI_CSS = `
   nextjs-portal,
+  next-route-announcer,
   [data-nextjs-toast],
+  [data-nextjs-toast-errors],
   [data-nextjs-dialog-overlay],
   [data-nextjs-dev-tools-button],
-  #__next-build-watcher {
+  [data-nextjs-dev-toolbar],
+  [data-nextjs-scroll-focus-boundary],
+  .nextjs-toast,
+  .nextjs-toast-errors-parent,
+  #__next-build-watcher,
+  #__next-dev-overlay {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
     opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
   }
+`;
+
+const HIDE_DEV_UI_INIT_SCRIPT = `
+(() => {
+  const css = ${JSON.stringify(HIDE_DEV_UI_CSS)};
+  const STYLE_ID = "record-demo-hide-next";
+  const SELECTOR =
+    "nextjs-portal, next-route-announcer, [data-nextjs-toast], [data-nextjs-toast-errors], [data-nextjs-dev-tools-button], [data-nextjs-dev-toolbar], .nextjs-toast-errors-parent";
+
+  const ensureStyle = () => {
+    let style = document.getElementById(STYLE_ID);
+    if (!style) {
+      style = document.createElement("style");
+      style.id = STYLE_ID;
+      document.head.appendChild(style);
+    }
+    style.textContent = css;
+  };
+
+  const purge = () => {
+    ensureStyle();
+    document.querySelectorAll(SELECTOR).forEach((el) => {
+      el.style.setProperty("display", "none", "important");
+      el.style.setProperty("visibility", "hidden", "important");
+      el.style.setProperty("opacity", "0", "important");
+      el.style.setProperty("pointer-events", "none", "important");
+    });
+  };
+
+  purge();
+  new MutationObserver(purge).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+})();
 `;
 
 async function hideDevUi(page: Page) {
   await page.addStyleTag({ content: HIDE_DEV_UI_CSS });
+  await page.evaluate(HIDE_DEV_UI_INIT_SCRIPT);
+}
+
+/** Bloqueia só o stream de vídeo — mantém API/embed do YouTube para o player reagir ao clique */
+async function blockHeavyMedia(page: Page) {
+  await page.route("**/*", async (route) => {
+    const url = route.request().url();
+    if (url.includes("googlevideo.com")) {
+      await route.abort();
+      return;
+    }
+    await route.continue();
+  });
 }
 
 async function recordDemo() {
@@ -39,7 +99,6 @@ async function recordDemo() {
 
   await warmupPage(browser);
 
-  const startedAt = Date.now();
   const context = await browser.newContext({
     viewport: { width: 393, height: 852 },
     deviceScaleFactor: 1,
@@ -48,12 +107,14 @@ async function recordDemo() {
       size: { width: 393, height: 852 },
     },
   });
+  await context.addInitScript(HIDE_DEV_UI_INIT_SCRIPT);
 
   const page = await context.newPage();
   page.setDefaultTimeout(45_000);
+  await blockHeavyMedia(page);
 
-  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 30_000 });
-  await page.waitForSelector(".panda-present", { timeout: 20_000 });
+  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  await page.waitForSelector(".panda-present", { timeout: 60_000 });
   await hideDevUi(page);
   await waitForCriticalAssets(page);
   await waitForPresentPreload(page);
@@ -89,21 +150,27 @@ async function recordDemo() {
     document.addEventListener("mouseup", () => cursor.classList.remove("clicking"));
   });
 
-  const remaining = () => Math.max(0, MAX_DURATION_MS - (Date.now() - startedAt));
-  const wait = async (ms: number) => page.waitForTimeout(Math.min(ms, remaining()));
+  /** Contagem começa só depois do preload — interações usam o vídeo inteiro */
+  const startedAt = Date.now();
+  const tourElapsed = () => Date.now() - startedAt;
+  const wait = async (ms: number) => page.waitForTimeout(ms);
+  const holdUntilTarget = async (minTailMs = 2500) => {
+    const tail = Math.max(minTailMs, TARGET_DURATION_MS - tourElapsed());
+    await wait(tail);
+  };
 
   const move = async (x: number, y: number) => {
-    await page.mouse.move(x, y, { steps: 12 });
-    await wait(60);
+    await page.mouse.move(x, y, { steps: 10 });
+    await wait(50);
   };
 
   const clickAt = async (x: number, y: number) => {
     await move(x, y);
-    await wait(120);
+    await wait(100);
     await page.mouse.down();
-    await wait(60);
+    await wait(50);
     await page.mouse.up();
-    await wait(180);
+    await wait(150);
   };
 
   const scrollToCardById = async (cardId: string) => {
@@ -113,93 +180,129 @@ async function recordDemo() {
     await page.evaluate((id) => {
       const el = document.getElementById(`card-${id}`);
       if (!el) return;
-      const top = el.getBoundingClientRect().top + window.scrollY - 28;
+      const top = el.getBoundingClientRect().top + window.scrollY - 24;
       window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
     }, cardId);
-    await wait(400);
+    await wait(350);
   };
 
-  const clickLocatorCenter = async (selector: string) => {
+  const clickLocator = async (selector: string) => {
     const locator = page.locator(selector).first();
     if ((await locator.count()) === 0) return false;
     await locator.scrollIntoViewIfNeeded();
-    await wait(200);
+    await locator.waitFor({ state: "visible", timeout: 8000 }).catch(() => undefined);
+    await wait(220);
     const box = await locator.boundingBox();
     if (!box) return false;
     await clickAt(box.x + box.width / 2, Math.min(box.y + box.height / 2, 820));
     return true;
   };
 
-  const waitForEnabled = async (selector: string, timeoutMs = 12_000) => {
-    const locator = page.locator(`${selector}:not([disabled])`).first();
-    try {
-      await locator.waitFor({ state: "visible", timeout: timeoutMs });
-      return true;
-    } catch {
-      return false;
-    }
+  const clickRole = async (name: RegExp, scope?: string) => {
+    const root = scope ? page.locator(scope) : page;
+    const btn = root.getByRole("button", { name }).first();
+    if ((await btn.count()) === 0) return false;
+    await btn.scrollIntoViewIfNeeded();
+    await btn.waitFor({ state: "visible", timeout: 8000 }).catch(() => undefined);
+    await wait(220);
+    const box = await btn.boundingBox();
+    if (!box) return false;
+    await clickAt(box.x + box.width / 2, Math.min(box.y + box.height / 2, 820));
+    return true;
   };
 
-  // 1 — Música
-  await scrollToCardById("music");
-  await wait(500);
-  if (await waitForEnabled(".panda-music-card__play")) {
-    await clickLocatorCenter(".panda-music-card__play");
-    await wait(1200);
-  }
+  const waitForHidden = async (selector: string, timeoutMs = 6000) => {
+    await page
+      .locator(selector)
+      .first()
+      .waitFor({ state: "hidden", timeout: timeoutMs })
+      .catch(() => undefined);
+  };
 
-  // 2 — Hero: caixa + câmera polaroid
-  await scrollToCardById("hero");
-  await wait(400);
-  await clickLocatorCenter(".gift-box");
-  await wait(800);
-  await clickLocatorCenter(".cam-stage__camera-btn");
-  await wait(2200);
-
-  // 3 — Sobre o casal (contador)
-  await scrollToCardById("about_couple");
-  await wait(1400);
-
-  // 4 — Galeria de memórias
-  await scrollToCardById("memories");
-  await wait(350);
-  await clickLocatorCenter(".panda-gallery__moment");
-  await wait(1100);
-  await clickLocatorCenter(".photo-stories__tap--next");
-  await wait(700);
-  await clickLocatorCenter(".photo-stories__tap--next");
-  await wait(600);
-  await clickLocatorCenter(".photo-stories__close");
-  await wait(350);
-
-  // 5 — Museu (preview embutido — espera SVGs + fotos, sem ampliar)
-  await scrollToCardById("project_museum");
-  await waitForMuseumScene(page);
-  await wait(Math.min(3500, remaining()));
-
-  // 6 — Caixa de bombons
-  await scrollToCardById("project_chocolate");
-  await wait(350);
-  await clickLocatorCenter(".chocolate-open-hint");
-  await wait(800);
-  await clickLocatorCenter(".chocolate-viewer-bite");
-  await wait(700);
-  await clickLocatorCenter(".chocolate-viewer-bite");
-  await wait(600);
-
-  // 7 — Buquê
-  await scrollToCardById("bouquet");
+  // Começa no topo — música é o primeiro card
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await wait(1200);
 
-  // 8 — Carta de amor
-  await scrollToCardById("letter");
-  await wait(350);
-  await clickLocatorCenter(".evnelope-hit");
-  await wait(1800);
+  // 1 — Música: toca desde o início (~7s)
+  await scrollToCardById("music");
+  await wait(600);
+  await page
+    .locator(".panda-music-card__play")
+    .first()
+    .waitFor({ state: "visible", timeout: 15_000 })
+    .catch(() => undefined);
+  await wait(800);
+  await clickLocator("#card-music .panda-music-card__play");
+  await wait(5800);
 
-  // 9 — Despedida final
+  // 2 — Câmera polaroid: caixa → flash → 2 fotos (~12s)
+  await scrollToCardById("hero");
+  await wait(700);
+  await clickLocator("#card-hero .gift-box");
+  await wait(2800);
+  await page
+    .locator("#card-hero .cam-stage__camera-btn")
+    .first()
+    .waitFor({ state: "visible", timeout: 8000 })
+    .catch(() => undefined);
+  await clickLocator("#card-hero .cam-stage__camera-btn");
+  await wait(7200);
+
+  // 3 — Sobre o casal + contador (~6s)
+  await scrollToCardById("about_couple");
+  await wait(5800);
+
+  // 4 — Memórias: abre galeria e navega (~7s)
+  await scrollToCardById("memories");
+  await wait(500);
+  await clickLocator("#card-memories .panda-gallery__moment");
+  await page.locator(".photo-stories").first().waitFor({ state: "visible", timeout: 8000 });
+  await wait(1800);
+  await clickLocator(".photo-stories__tap--next");
+  await wait(1500);
+  await clickLocator(".photo-stories__tap--next");
+  await wait(1200);
+  await clickLocator(".photo-stories__close");
+  await waitForHidden(".photo-stories");
+  await wait(600);
+
+  // 5 — Museu: só rola e observa (sem clicar / ampliar)
+  await scrollToCardById("project_museum");
+  await wait(3200);
+
+  // 6 — Bombons: abre a caixa e morde 2 (~6s)
+  await scrollToCardById("project_chocolate");
+  await wait(500);
+  await clickRole(/abrir caixa de chocolates/i, "#card-project_chocolate");
+  await page
+    .locator("#card-project_chocolate .chocolate-placements-layer--visible")
+    .first()
+    .waitFor({ state: "visible", timeout: 8000 })
+    .catch(() => undefined);
+  await wait(1200);
+  for (let i = 0; i < 2; i++) {
+    await clickLocator("#card-project_chocolate .chocolate-viewer-bite");
+    await wait(1300);
+  }
+
+  // 7 — Buquê (~5s)
+  await scrollToCardById("bouquet");
+  await wait(4800);
+
+  // 8 — Carta: abre o envelope (~7s)
+  await scrollToCardById("letter");
+  await wait(500);
+  await clickLocator("#card-letter .evnelope-hit");
+  await page
+    .locator("#card-letter .envelope-gift-scene--open")
+    .first()
+    .waitFor({ state: "visible", timeout: 8000 })
+    .catch(() => undefined);
+  await wait(6200);
+
+  // 9 — Despedida — segura até completar ~1 min de tour
   await scrollToCardById("forever");
-  await wait(Math.min(1800, remaining()));
+  await holdUntilTarget(3000);
 
   const video = page.video();
   await context.close();
@@ -217,8 +320,8 @@ async function recordDemo() {
   }
 
   await fs.rename(recordedPath, OUTPUT_WEBM);
-  const elapsed = ((Date.now() - startedAt) / 1000).toFixed(1);
-  console.log(`Vídeo salvo: ${OUTPUT_WEBM} (${elapsed}s)`);
+  const durationSec = ((Date.now() - startedAt) / 1000).toFixed(1);
+  console.log(`Vídeo salvo: ${OUTPUT_WEBM} (${durationSec}s)`);
 
   try {
     execSync(
@@ -227,19 +330,18 @@ async function recordDemo() {
     );
     console.log(`MP4 gerado: ${OUTPUT_MP4}`);
   } catch {
-    console.log("ffmpeg não disponível — usando presente-demo.webm no mockup.");
+    console.log("ffmpeg não disponível — apenas WebM foi gerado.");
   }
 }
 
 async function warmupPage(browser: Browser) {
   const page = await browser.newPage();
-  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForSelector(".panda-present", { timeout: 60_000 });
+  await blockHeavyMedia(page);
+  await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 45_000 });
+  await page.waitForSelector(".panda-present", { timeout: 45_000 });
   await hideDevUi(page);
   await waitForCriticalAssets(page);
   await waitForPresentPreload(page);
-  await page.locator("#card-project_museum").scrollIntoViewIfNeeded();
-  await waitForMuseumScene(page);
   await page.close();
 }
 
@@ -248,28 +350,10 @@ async function waitForPresentPreload(page: Page) {
     .waitForFunction(
       () => document.documentElement.getAttribute("data-present-preload") === "ready",
       undefined,
-      { timeout: 120_000 }
-    )
-    .catch(() => undefined);
-  await page.waitForTimeout(400);
-}
-
-async function waitForMuseumScene(page: Page) {
-  await page
-    .waitForFunction(
-      () => {
-        const card = document.getElementById("card-project_museum");
-        if (!card) return false;
-        if (!card.querySelector(".museum-wall-v2")) return false;
-
-        const photos = card.querySelectorAll(".museum-wall-v2 .museum-frame-photo");
-        return photos.length >= 2;
-      },
-      undefined,
       { timeout: 60_000 }
     )
     .catch(() => undefined);
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(300);
 }
 
 async function waitForCriticalAssets(page: Page) {
@@ -279,13 +363,13 @@ async function waitForCriticalAssets(page: Page) {
       return Boolean(svg && svg.innerHTML.trim().length > 80);
     },
     undefined,
-    { timeout: 10_000 }
+    { timeout: 15_000 }
   );
   await page
     .waitForFunction(
       () => document.documentElement.getAttribute("data-present-critical-ready") === "ready",
       undefined,
-      { timeout: 30_000 }
+      { timeout: 45_000 }
     )
     .catch(() => undefined);
   await page.waitForTimeout(300);

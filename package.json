@@ -14,7 +14,11 @@
     "capture-hero-shots": "tsx scripts/capture-hero-screenshots.ts",
     "optimize-svgs": "tsx scripts/optimize-svgs.ts",
     "verify-deploy": "tsx scripts/verify-deploy.ts",
-    "test": "npm run verify-deploy"
+    "test": "npm run verify-deploy",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:all": "npm run verify-deploy -- --skip-build && npm run test:e2e"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

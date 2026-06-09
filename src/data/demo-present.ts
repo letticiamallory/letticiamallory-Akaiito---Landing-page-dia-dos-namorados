@@ -41,7 +41,7 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
   version: 2,
   pageConfig: {
     slug: DEMO_PRESENT_SLUG,
-    coupleNames: "Ana & João",
+    coupleNames: "João & Letticia",
     theme: "scrapbook_red",
     createdAt: "2026-06-08T00:00:00.000Z",
   },
@@ -67,8 +67,8 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
       labelTexts: ["para sempre ♡", "te amo muito"],
     }),
     demoSection("hero_couple", 2, {
-      person1Name: "Ana",
-      person2Name: "João",
+      person1Name: "João",
+      person2Name: "Letticia",
       tagline: "Uma história de amor",
       backgroundPhoto: demoAsset("couple-3.jpg"),
       bouquet: { ...DEFAULT_BOUQUET },
@@ -95,8 +95,8 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
       ],
     }),
     demoSection("museum_of_us", 5, {
-      person1Name: "Ana",
-      person2Name: "João",
+      person1Name: "João",
+      person2Name: "Letticia",
       museumTitle: "Museu de Nós",
       museumDate: "Desde março de 2022",
       elements: [
@@ -156,7 +156,7 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
     }),
     demoSection("love_letter", 7, {
       message:
-        "Você é a pessoa mais incrível que já conheci. Cada dia ao seu lado é um presente que não tem preço.",
+        "Letticia, você é a pessoa mais incrível que já conheci. Cada dia ao seu lado é um presente que não tem preço.",
       letter: { ...DEFAULT_LETTER },
     }),
     demoSection("custom_message", 8, {

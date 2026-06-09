@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChocolatesData } from "@/lib/gift-types";
 import {
   BOX_SLOTS,
@@ -34,17 +34,47 @@ export function ChocolateViewer({
   const [animating, setAnimating] = useState(false);
 
   const loadPlacements = useChocolateStore((s) => s.loadPlacements);
-  const reset = useChocolateStore((s) => s.reset);
   const biteInSlot = useChocolateStore((s) => s.biteInSlot);
   const placements = useChocolateStore((s) => s.placements);
+  const loadedKeyRef = useRef<string | null>(null);
+
+  const loadKey = useMemo(
+    () =>
+      JSON.stringify({
+        placements: data.placements ?? [],
+        boxTitle: data.boxTitle ?? "",
+        coupleName: data.coupleName ?? "",
+        senderName: data.senderName ?? "",
+        receiverName: data.receiverName ?? "",
+      }),
+    [
+      data.placements,
+      data.boxTitle,
+      data.coupleName,
+      data.senderName,
+      data.receiverName,
+    ]
+  );
 
   useEffect(() => {
-    loadPlacements(data.placements ?? [], {
-      boxTitle: data.boxTitle ?? "Caixa de Chocolates",
-      coupleName: data.coupleName ?? `${data.senderName} & ${data.receiverName}`,
+    if (loadedKeyRef.current === loadKey) return;
+    loadedKeyRef.current = loadKey;
+
+    const payload = JSON.parse(loadKey) as {
+      placements: ChocolatesData["placements"];
+      boxTitle: string;
+      coupleName: string;
+      senderName: string;
+      receiverName: string;
+    };
+
+    loadPlacements(payload.placements ?? [], {
+      boxTitle: payload.boxTitle || "Caixa de Chocolates",
+      coupleName:
+        payload.coupleName ||
+        `${payload.senderName} & ${payload.receiverName}`,
     });
-    return () => reset();
-  }, [data, loadPlacements, reset]);
+  }, [loadKey, loadPlacements]);
 
   const updateScale = useCallback(() => {
     const vp = viewportRef.current;
@@ -174,21 +204,17 @@ export function ChocolateViewer({
           )}
         </div>
 
-        {opened ? (
-          <div className="chocolate-scene" style={{ width: displayW, height: displayH }}>
-            {sceneContent}
-          </div>
-        ) : (
-          <button
-            type="button"
-            className="chocolate-scene border-0 bg-transparent p-0 cursor-pointer"
-            style={{ width: displayW, height: displayH }}
-            onClick={handleOpen}
-            aria-label="Abrir caixa de chocolates"
-          >
-            {sceneContent}
-          </button>
-        )}
+        <div className="chocolate-scene" style={{ width: displayW, height: displayH }}>
+          {sceneContent}
+          {!opened && (
+            <button
+              type="button"
+              className="chocolate-scene-open"
+              onClick={handleOpen}
+              aria-label="Abrir caixa de chocolates"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -318,6 +318,17 @@
   flex-shrink: 0;
 }
 
+.chocolate-scene-open {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
 .chocolate-box-layer {
   position: relative;
 }

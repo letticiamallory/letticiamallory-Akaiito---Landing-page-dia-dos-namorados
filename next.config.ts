@@ -15,6 +15,7 @@ const watchIgnored = [
 ];
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   experimental: {
     optimizePackageImports: [
       "@dnd-kit/core",
