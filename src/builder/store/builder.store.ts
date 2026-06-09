@@ -1,7 +1,8 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { createBuilderPersistStorage } from "@/lib/builder-persist-storage";
 import { nanoid } from "nanoid";
 import type {
   BuilderSection,
@@ -296,6 +297,7 @@ export const useBuilderStore = create<BuilderStore>()(
     }),
     {
       name: "linkamor-builder-v2",
+      storage: createJSONStorage(() => createBuilderPersistStorage()),
       partialize: (s) => ({
         pageConfig: s.pageConfig,
         sections: s.sections.filter((sec) => (sec.sectionId as string) !== "quiz_couple"),

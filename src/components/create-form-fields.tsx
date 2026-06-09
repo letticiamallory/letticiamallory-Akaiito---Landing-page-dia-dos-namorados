@@ -355,7 +355,7 @@ export function BulkPhotoUpload({
     const next = [...filledPhotos];
 
     for (const file of batch) {
-      const url = await uploadImageFile(file);
+      const url = await uploadImageFile(file, { profile: "collage" });
       next.push({ url, caption: "", momentId });
     }
 

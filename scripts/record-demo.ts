@@ -255,7 +255,14 @@ async function recordDemo() {
     .waitFor({ state: "visible", timeout: 8000 })
     .catch(() => undefined);
   await clickLocator("#card-hero .cam-stage__camera-btn");
-  await wait(7200);
+  await page
+    .waitForFunction(
+      () => document.querySelectorAll("#card-hero .cam-stage__polaroid-clip").length >= 2,
+      undefined,
+      { timeout: 12_000 }
+    )
+    .catch(() => undefined);
+  await wait(2800);
 
   // 3 — Sobre o casal + contador (~6s)
   await scrollToCardById("about_couple");
