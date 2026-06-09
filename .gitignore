@@ -55,4 +55,7 @@ next-env.d.ts
 .tmp-letter-pptx/
 .tmp-pptx-new.zip
 
+# debug captures (não versionar)
+/public/assets/demo/museum-webp-previews/
+
 .vercel

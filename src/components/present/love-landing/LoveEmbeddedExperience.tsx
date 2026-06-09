@@ -8,8 +8,8 @@ import type {
 } from "@/lib/builder/types";
 import type { MuseumElement } from "@/lib/gift-types";
 import { HistoriaChocolatesSection } from "@/components/historia/historia-chocolates-section";
-import { HistoriaMuseuSection } from "@/components/historia/historia-museu-section";
 import { HistoriaPolaroidSection } from "@/components/historia/historia-polaroid-section";
+import { HistoriaMuseuSection } from "@/components/historia/historia-museu-section";
 import "@/components/historia/historia-page.css";
 
 function getMuseumEmbedMeta(

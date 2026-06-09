@@ -1025,6 +1025,10 @@
   box-shadow: none;
 }
 
+.panda-present .love-letter .evnelope.open .front.pocket.has-image {
+  z-index: 6;
+}
+
 .panda-present .love-map__card {
   background: transparent;
   border: none;

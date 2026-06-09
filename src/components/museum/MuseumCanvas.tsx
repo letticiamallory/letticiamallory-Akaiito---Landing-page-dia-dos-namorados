@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
   CANVAS_H,
   CANVAS_W,
@@ -82,8 +82,9 @@ export function MuseumCanvas({
         style={{
           width: CANVAS_W,
           height: CANVAS_H,
-          ...(embedded ? { zoom: scale } : { transform: `scale(${scale})` }),
-        } as CSSProperties}
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        }}
         onClick={() => editable && selectElement(null)}
       >
         <InlineSvg src={MUSEUM_ASSETS.background} className="museum-canvas-bg" />

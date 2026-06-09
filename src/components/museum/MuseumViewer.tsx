@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { MuseuData } from "@/lib/gift-types";
-import { CANVAS_H, CANVAS_W, MUSEUM_ASSETS } from "@/data/museum-frames";
+import { CANVAS_H, CANVAS_W, MUSEUM_ASSETS, getFrameDef, getSpectatorDef } from "@/data/museum-frames";
 import { isImagePreloaded, preloadImage } from "@/lib/present-preload";
 import { getCanvasFitScale, getCanvasScale } from "@/lib/museum-canvas-utils";
 import { useMuseumStore } from "@/store/museum.store";
@@ -44,13 +44,26 @@ export function MuseumViewer({ data, embedded = false }: { data: MuseuData; embe
 
   useEffect(() => {
     let cancelled = false;
-    preloadImage(MUSEUM_ASSETS.background).then(() => {
+    const urls = new Set<string>([MUSEUM_ASSETS.background]);
+    for (const el of data.elements ?? []) {
+      if (el.type === "frame") {
+        if (el.photoUrl) urls.add(el.photoUrl);
+        if (el.frameIndex) {
+          const file = getFrameDef(el.frameIndex)?.file;
+          if (file) urls.add(file);
+        }
+      } else if (el.type === "spectator" && el.spectatorIndex) {
+        const file = getSpectatorDef(el.spectatorIndex)?.file;
+        if (file) urls.add(file);
+      }
+    }
+    Promise.all([...urls].map((url) => preloadImage(url))).then(() => {
       if (!cancelled) setSceneReady(true);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     updateScale();
@@ -103,6 +116,7 @@ export function MuseumViewer({ data, embedded = false }: { data: MuseuData; embe
                   width: "100%",
                   aspectRatio: `${CANVAS_W} / ${CANVAS_H}`,
                   position: "relative",
+                  overflow: "hidden",
                 }
               : {
                   width: `${CANVAS_W * scale}px`,

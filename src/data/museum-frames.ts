@@ -68,6 +68,14 @@ export function getSpectatorDef(index: number) {
   return SPECTATOR_DATA.find((s) => s.id === index);
 }
 
+export function getFrameWebp(frameIndex: number): string {
+  return `/museum/frame-${frameIndex}.assets/frame-${frameIndex}-0.webp`;
+}
+
+export function getSpectatorWebp(spectatorIndex: number): string {
+  return `/museum/spectator-${spectatorIndex}.assets/spectator-${spectatorIndex}-0.webp`;
+}
+
 export function defaultFrameSize(def: FrameDefinition) {
   const width = def.defaultW;
   return { width, height: (width * def.vh) / def.vw };

@@ -8,17 +8,19 @@ type InlineSvgProps = {
 };
 
 /**
- * SVGs otimizados referenciam WebPs em *.assets/ — <img> não carrega isso.
- * <object> carrega o SVG como documento e resolve as imagens externas.
+ * Museum SVGs embed WebPs as data URIs. Use <img> — <object> fails inside
+ * CSS-scaled canvases (frame overlays and spectators render blank or tiny).
  */
 export function InlineSvg({ src, className, draggable = false, title }: InlineSvgProps) {
   return (
-    <object
-      data={src}
-      type="image/svg+xml"
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={title ?? ""}
       className={className}
-      aria-label={title}
       draggable={draggable}
+      decoding="async"
+      style={{ display: "block", width: "100%", height: "100%" }}
     />
   );
 }

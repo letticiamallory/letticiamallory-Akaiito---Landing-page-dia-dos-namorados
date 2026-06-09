@@ -1,13 +1,31 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { chromium, type Page } from "playwright";
+import { chromium, type Browser, type Page } from "playwright";
 
 const OUTPUT_DIR = "public/assets/demo";
 const OUTPUT_WEBM = path.join(OUTPUT_DIR, "presente-demo.webm");
 const OUTPUT_MP4 = path.join(OUTPUT_DIR, "presente-demo.mp4");
-const DEMO_URL = process.env.RECORD_URL ?? "http://localhost:3000/presente/mv3ejyxx";
-const MAX_DURATION_MS = 55_000;
+const DEMO_URL =
+  process.env.RECORD_URL ?? "http://localhost:3000/presente/demo-preview";
+const MAX_DURATION_MS = 95_000;
+
+const HIDE_DEV_UI_CSS = `
+  nextjs-portal,
+  [data-nextjs-toast],
+  [data-nextjs-dialog-overlay],
+  [data-nextjs-dev-tools-button],
+  #__next-build-watcher {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+`;
+
+async function hideDevUi(page: Page) {
+  await page.addStyleTag({ content: HIDE_DEV_UI_CSS });
+}
 
 async function recordDemo() {
   const browser = await chromium.launch({
@@ -31,29 +49,18 @@ async function recordDemo() {
     },
   });
 
-  await context.route("**/*", (route) => {
-    const url = route.request().url();
-    if (
-      url.includes("youtube.com") ||
-      url.includes("youtu.be") ||
-      url.includes("googlevideo.com") ||
-      url.includes("ytimg.com")
-    ) {
-      route.abort();
-      return;
-    }
-    route.continue();
-  });
-
   const page = await context.newPage();
   page.setDefaultTimeout(45_000);
 
   await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 30_000 });
   await page.waitForSelector(".panda-present", { timeout: 20_000 });
+  await hideDevUi(page);
   await waitForCriticalAssets(page);
+  await waitForPresentPreload(page);
 
   await page.addStyleTag({
     content: `
+      ${HIDE_DEV_UI_CSS}
       * { cursor: none !important; }
       .fake-cursor {
         width: 20px;
@@ -99,32 +106,17 @@ async function recordDemo() {
     await wait(180);
   };
 
-  const smoothScrollBy = async (delta: number) => {
-    if (Math.abs(delta) < 4) return;
-    const steps = Math.min(8, Math.max(4, Math.round(Math.abs(delta) / 80)));
-    const stepDelta = delta / steps;
-    for (let i = 0; i < steps; i++) {
-      await page.mouse.wheel(0, stepDelta);
-      await wait(35);
-    }
-    await wait(200);
-  };
-
-  const scrollToCard = async (title: string) => {
-    const target = await page.evaluate((cardTitle) => {
-      const cards = Array.from(document.querySelectorAll(".panda-present .panda-card"));
-      const card = cards.find((node) =>
-        node.textContent?.toLowerCase().includes(cardTitle.toLowerCase())
-      ) as HTMLElement | undefined;
-      if (!card) return window.scrollY;
-      const rect = card.getBoundingClientRect();
-      return Math.max(0, window.scrollY + rect.top - 36);
-    }, title);
-
-    const current = await page.evaluate(() => window.scrollY);
-    await smoothScrollBy(target - current);
-    await page.evaluate((y) => window.scrollTo(0, y), target);
-    await wait(280);
+  const scrollToCardById = async (cardId: string) => {
+    const card = page.locator(`#card-${cardId}`).first();
+    if ((await card.count()) === 0) return;
+    await card.scrollIntoViewIfNeeded();
+    await page.evaluate((id) => {
+      const el = document.getElementById(`card-${id}`);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - 28;
+      window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+    }, cardId);
+    await wait(400);
   };
 
   const clickLocatorCenter = async (selector: string) => {
@@ -138,57 +130,76 @@ async function recordDemo() {
     return true;
   };
 
-  // Hero + caixa polaroid + câmera
-  await scrollToCard("Juntos para sempre");
-  await wait(350);
+  const waitForEnabled = async (selector: string, timeoutMs = 12_000) => {
+    const locator = page.locator(`${selector}:not([disabled])`).first();
+    try {
+      await locator.waitFor({ state: "visible", timeout: timeoutMs });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  // 1 — Música
+  await scrollToCardById("music");
+  await wait(500);
+  if (await waitForEnabled(".panda-music-card__play")) {
+    await clickLocatorCenter(".panda-music-card__play");
+    await wait(1200);
+  }
+
+  // 2 — Hero: caixa + câmera polaroid
+  await scrollToCardById("hero");
+  await wait(400);
   await clickLocatorCenter(".gift-box");
-  await wait(700);
+  await wait(800);
   await clickLocatorCenter(".cam-stage__camera-btn");
-  await wait(1800);
+  await wait(2200);
 
-  // Música
-  await scrollToCard("Nossa Música");
+  // 3 — Sobre o casal (contador)
+  await scrollToCardById("about_couple");
+  await wait(1400);
+
+  // 4 — Galeria de memórias
+  await scrollToCardById("memories");
   await wait(350);
-  await clickLocatorCenter(".panda-music-card__play");
-  await wait(900);
-
-  // Galeria
-  await scrollToCard("Memórias");
-  await wait(300);
   await clickLocatorCenter(".panda-gallery__moment");
   await wait(1100);
   await clickLocatorCenter(".photo-stories__tap--next");
   await wait(700);
+  await clickLocatorCenter(".photo-stories__tap--next");
+  await wait(600);
   await clickLocatorCenter(".photo-stories__close");
-  await wait(300);
-
-  // Museu
-  await scrollToCard("Museu de Nós");
-  await wait(500);
-  await clickLocatorCenter(".museum-expand-btn");
-  await wait(900);
-  await move(220, 360);
   await wait(350);
-  await page.keyboard.press("Escape");
-  await wait(300);
 
-  // Bombons
-  await scrollToCard("Caixa de Bombons");
-  await wait(300);
+  // 5 — Museu (preview embutido — espera SVGs + fotos, sem ampliar)
+  await scrollToCardById("project_museum");
+  await waitForMuseumScene(page);
+  await wait(Math.min(3500, remaining()));
+
+  // 6 — Caixa de bombons
+  await scrollToCardById("project_chocolate");
+  await wait(350);
   await clickLocatorCenter(".chocolate-open-hint");
+  await wait(800);
+  await clickLocatorCenter(".chocolate-viewer-bite");
   await wait(700);
   await clickLocatorCenter(".chocolate-viewer-bite");
   await wait(600);
 
-  // Carta
-  await scrollToCard("Carta de amor");
-  await wait(300);
-  await clickLocatorCenter(".evnelope-hit");
-  await wait(1600);
+  // 7 — Buquê
+  await scrollToCardById("bouquet");
+  await wait(1200);
 
-  // Despedida
-  await scrollToCard("Para sempre");
-  await wait(Math.min(1200, remaining()));
+  // 8 — Carta de amor
+  await scrollToCardById("letter");
+  await wait(350);
+  await clickLocatorCenter(".evnelope-hit");
+  await wait(1800);
+
+  // 9 — Despedida final
+  await scrollToCardById("forever");
+  await wait(Math.min(1800, remaining()));
 
   const video = page.video();
   await context.close();
@@ -220,12 +231,45 @@ async function recordDemo() {
   }
 }
 
-async function warmupPage(browser: Awaited<ReturnType<typeof chromium.launch>>) {
+async function warmupPage(browser: Browser) {
   const page = await browser.newPage();
   await page.goto(DEMO_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForSelector(".panda-present", { timeout: 60_000 });
+  await hideDevUi(page);
   await waitForCriticalAssets(page);
+  await waitForPresentPreload(page);
+  await page.locator("#card-project_museum").scrollIntoViewIfNeeded();
+  await waitForMuseumScene(page);
   await page.close();
+}
+
+async function waitForPresentPreload(page: Page) {
+  await page
+    .waitForFunction(
+      () => document.documentElement.getAttribute("data-present-preload") === "ready",
+      undefined,
+      { timeout: 120_000 }
+    )
+    .catch(() => undefined);
+  await page.waitForTimeout(400);
+}
+
+async function waitForMuseumScene(page: Page) {
+  await page
+    .waitForFunction(
+      () => {
+        const card = document.getElementById("card-project_museum");
+        if (!card) return false;
+        if (!card.querySelector(".museum-wall-v2")) return false;
+
+        const photos = card.querySelectorAll(".museum-wall-v2 .museum-frame-photo");
+        return photos.length >= 2;
+      },
+      undefined,
+      { timeout: 60_000 }
+    )
+    .catch(() => undefined);
+  await page.waitForTimeout(1200);
 }
 
 async function waitForCriticalAssets(page: Page) {

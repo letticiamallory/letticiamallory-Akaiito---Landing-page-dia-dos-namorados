@@ -65,14 +65,14 @@ export const ENVELOPE_STYLES: Record<
   "classic-cream": {
     name: "Kraft",
     closedSrc: "/letter/envelopes/classic-cream.webp",
-    openSrc: "/letter/envelopes/classic-cream-open.svg",
+    openSrc: "/letter/envelopes/classic-cream-open.webp",
     closedAspect: 1.674,
     openAspect: 1.015,
   },
   blush: {
     name: "Creme quente",
     closedSrc: "/letter/envelopes/blush.webp",
-    openSrc: "/letter/envelopes/blush-open.svg",
+    openSrc: "/letter/envelopes/blush-open.webp",
     closedAspect: 1.674,
     openAspect: 1.015,
   },
@@ -86,7 +86,7 @@ export const ENVELOPE_STYLES: Record<
   midnight: {
     name: "Cinza pedra",
     closedSrc: "/letter/envelopes/midnight.webp",
-    openSrc: "/letter/envelopes/midnight-open.svg",
+    openSrc: "/letter/envelopes/midnight-open.webp",
     closedAspect: 1.674,
     openAspect: 1.015,
   },

@@ -6,6 +6,23 @@ export const DEMO_PRESENT_SLUG = "demo-preview";
 
 const demoAsset = (name: string) => `/assets/demo/${name}`;
 
+/** Altura proporcional à moldura (evita distorção no canvas). */
+function museumFrameHeight(frameIndex: number, width: number): number {
+  const ratios: Record<number, [number, number]> = {
+    1: [798, 645],
+    2: [687, 804],
+    5: [915, 702],
+  };
+  const [vw, vh] = ratios[frameIndex] ?? [1, 1];
+  return Math.round((width * vh) / vw);
+}
+
+function museumSpectatorHeight(width: number): number {
+  return Math.round((width * 351) / 1068);
+}
+
+const DEMO_MUSEUM_SPECTATOR_W = 1100;
+
 function demoSection(
   sectionId: BuilderSection["sectionId"],
   order: number,
@@ -87,10 +104,10 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
           id: "demo-frame-1",
           type: "frame",
           frameIndex: 1,
-          x: 30,
-          y: 105,
-          width: 160,
-          height: 120,
+          x: 76,
+          y: 309,
+          width: 406,
+          height: museumFrameHeight(1, 406),
           zIndex: 3,
           photoUrl: demoAsset("couple-1.jpg"),
         },
@@ -98,10 +115,10 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
           id: "demo-frame-5",
           type: "frame",
           frameIndex: 5,
-          x: 230,
-          y: 112,
-          width: 180,
-          height: 135,
+          x: 585,
+          y: 330,
+          width: 457,
+          height: museumFrameHeight(5, 457),
           zIndex: 3,
           photoUrl: demoAsset("couple-5.jpg"),
         },
@@ -109,10 +126,10 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
           id: "demo-frame-2",
           type: "frame",
           frameIndex: 2,
-          x: 440,
-          y: 88,
-          width: 140,
-          height: 105,
+          x: 1118,
+          y: 267,
+          width: 356,
+          height: museumFrameHeight(2, 356),
           zIndex: 3,
           photoUrl: demoAsset("couple-2.jpg"),
         },
@@ -120,10 +137,10 @@ export const DEMO_PRESENT: ScrapbookPresentData = {
           id: "demo-spectator-2",
           type: "spectator",
           spectatorIndex: 2,
-          x: 150,
-          y: 288,
-          width: 300,
-          height: 200,
+          x: Math.round((1728 - DEMO_MUSEUM_SPECTATOR_W) / 2),
+          y: 1117 - museumSpectatorHeight(DEMO_MUSEUM_SPECTATOR_W) - 42,
+          width: DEMO_MUSEUM_SPECTATOR_W,
+          height: museumSpectatorHeight(DEMO_MUSEUM_SPECTATOR_W),
           zIndex: 4,
         },
       ],

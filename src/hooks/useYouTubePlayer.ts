@@ -156,23 +156,45 @@ export function useYouTubePlayer(videoId?: string) {
   }, [videoId, destroyPlayer]);
 
   useEffect(() => {
-    if (!playing || !ready) return;
+    if (!ready) return;
 
-    const interval = window.setInterval(() => {
+    const tick = () => {
       const player = playerRef.current;
-      if (!player) return;
+      const YT = window.YT;
+      if (!player || !YT) return;
+
+      const state = player.getPlayerState();
+      const { PLAYING, PAUSED, ENDED, BUFFERING } = YT.PlayerState;
+      const isPlaying = state === PLAYING;
+      const isBuffering = state === BUFFERING;
+
+      setPlaying(isPlaying);
+
+      if (state === ENDED) {
+        setProgress(0);
+        setCurrentLabel("0:00");
+        const duration = player.getDuration();
+        setRemainingLabel(
+          duration > 0 ? `-${formatTime(duration)}` : "-0:00"
+        );
+        return;
+      }
 
       const current = player.getCurrentTime();
       const duration = player.getDuration();
-      if (!duration || duration <= 0) return;
+      if (!Number.isFinite(current) || !duration || duration <= 0) return;
 
-      setProgress(Math.min(1, current / duration));
-      setCurrentLabel(formatTime(current));
-      setRemainingLabel(`-${formatTime(Math.max(0, duration - current))}`);
-    }, 250);
+      if (isPlaying || isBuffering || state === PAUSED) {
+        setProgress(Math.min(1, Math.max(0, current / duration)));
+        setCurrentLabel(formatTime(current));
+        setRemainingLabel(`-${formatTime(Math.max(0, duration - current))}`);
+      }
+    };
 
+    tick();
+    const interval = window.setInterval(tick, 200);
     return () => window.clearInterval(interval);
-  }, [playing, ready]);
+  }, [ready]);
 
   const play = useCallback(() => {
     if (!ready || !playerRef.current) return;

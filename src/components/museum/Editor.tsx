@@ -98,6 +98,7 @@ export function MuseumEditor() {
             width: "100%",
             aspectRatio: `${CANVAS_W} / ${CANVAS_H}`,
             position: "relative",
+            overflow: "hidden",
           }}
         >
           {!showExpanded && (

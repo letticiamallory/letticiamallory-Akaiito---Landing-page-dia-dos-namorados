@@ -18,9 +18,8 @@ export function PandaMusicCard({ data }: { data: FavoriteSongData }) {
   const { songTitle, videoId } = useMusicTrackDisplay(data);
   const subtitle = data.note?.trim();
   const coverUrl = resolveCoverUrl(data, videoId);
-  const { containerRef, ready, playing, progress, play, pause } = useYouTubePlayer(
-    videoId ?? undefined
-  );
+  const { containerRef, ready, playing, progress, currentLabel, remainingLabel, play, pause } =
+    useYouTubePlayer(videoId ?? undefined);
 
   useEffect(() => {
     const el = rootRef.current;
@@ -70,18 +69,26 @@ export function PandaMusicCard({ data }: { data: FavoriteSongData }) {
           {subtitle && <p className="panda-music-card__subtitle">{subtitle}</p>}
         </div>
 
-        <div className="panda-music-card__bar" aria-hidden>
-          <span
-            className="panda-music-card__fill"
-            style={
-              ready
-                ? {
-                    width: `${Math.max(progress * 100, playing ? 8 : 12)}%`,
-                    transition: "width 0.25s linear",
-                  }
-                : undefined
-            }
-          />
+        <div className="panda-music-card__progress">
+          {ready && (
+            <div className="panda-music-card__times" aria-hidden>
+              <span>{currentLabel}</span>
+              <span>{remainingLabel}</span>
+            </div>
+          )}
+          <div className="panda-music-card__bar" aria-hidden>
+            <span
+              className="panda-music-card__fill"
+              style={
+                ready
+                  ? {
+                      width: `${progress * 100}%`,
+                      transition: playing ? "width 0.2s linear" : "none",
+                    }
+                  : undefined
+              }
+            />
+          </div>
         </div>
 
         <div className="panda-music-card__controls">
