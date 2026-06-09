@@ -17,7 +17,7 @@ export function ChocolateCanvas({
   editable = true,
   embedded = false,
   editorSlot = false,
-  mobileScaleViaCss = false,
+  mobileEditor = false,
   canvasRef,
   showSlots = true,
 }: {
@@ -26,8 +26,8 @@ export function ChocolateCanvas({
   embedded?: boolean;
   /** Shell preenche o stage do editor (CSS) */
   editorSlot?: boolean;
-  /** Mobile: escala via CSS container query, sem transform inline */
-  mobileScaleViaCss?: boolean;
+  /** Editor mobile — shell absoluto + transform inline medido */
+  mobileEditor?: boolean;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   showSlots?: boolean;
 }) {
@@ -124,11 +124,9 @@ export function ChocolateCanvas({
         ref={canvasRef}
         className={`chocolate-canvas-shell chocolate-canvas-shell--embedded${
           editorSlot ? " chocolate-canvas-shell--editor-slot" : ""
-        }`}
+        }${mobileEditor ? " chocolate-canvas-shell--mobile-slot" : ""}`}
         style={
-          editorSlot && mobileScaleViaCss
-            ? undefined
-            : { width: displayW, height: displayH }
+          editorSlot && !mobileEditor ? { width: displayW, height: displayH } : undefined
         }
         onClick={() => editable && selectSlot(null)}
       >
@@ -139,7 +137,8 @@ export function ChocolateCanvas({
           style={{
             width: CANVAS_W,
             height: CANVAS_H,
-            ...(editorSlot && mobileScaleViaCss ? {} : { transform: `scale(${scale})` }),
+            transform: `scale(${scale})`,
+            ...(mobileEditor ? { transformOrigin: "top left" } : {}),
           }}
         >
           {canvasInner}

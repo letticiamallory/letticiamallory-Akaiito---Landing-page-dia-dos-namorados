@@ -2,7 +2,7 @@
 
 import { CANVAS_H, CANVAS_W, EDITOR_SCALE } from "@/data/chocolate-catalog";
 import { useChocolateDragFromPanel } from "@/hooks/useChocolateDragFromPanel";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ChocolateSidebar } from "./Sidebar";
 import { ChocolateCanvas, dropChocolateAt } from "./ChocolateCanvas";
 import "./chocolate-box.css";
@@ -23,20 +23,18 @@ function readMobileScale(stage: HTMLDivElement | null) {
   return width / CANVAS_W;
 }
 
+function subscribeMobileMq(onChange: () => void) {
+  const mq = window.matchMedia(MOBILE_MQ);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getMobileMqSnapshot() {
+  return window.matchMedia(MOBILE_MQ).matches;
+}
+
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_MQ);
-    const sync = () => setIsMobile(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  return isMobile;
+  return useSyncExternalStore(subscribeMobileMq, getMobileMqSnapshot, () => false);
 }
 
 function ChocolateEditorDesktop() {
@@ -97,7 +95,11 @@ function ChocolateEditorDesktop() {
 function ChocolateEditorMobile() {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(EDITOR_SCALE);
+  const [scale, setScale] = useState(() => {
+    if (typeof window === "undefined") return EDITOR_SCALE;
+    const w = window.innerWidth;
+    return w > 0 ? Math.min(1, (w - 64) / CANVAS_W) : EDITOR_SCALE;
+  });
 
   const updateScale = useCallback(() => {
     const next = readMobileScale(stageRef.current);
@@ -140,7 +142,7 @@ function ChocolateEditorMobile() {
             scale={scale}
             embedded
             editorSlot
-            mobileScaleViaCss
+            mobileEditor
             canvasRef={canvasRef}
           />
         </div>

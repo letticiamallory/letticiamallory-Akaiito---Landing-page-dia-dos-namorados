@@ -486,7 +486,6 @@
   }
 
   .chocolate-canvas-stage--editor-mobile {
-    container-type: inline-size;
     position: relative;
     width: 100%;
     max-width: 100%;
@@ -497,7 +496,8 @@
     flex-shrink: 0;
   }
 
-  .chocolate-canvas-stage--editor-mobile .chocolate-canvas-shell--editor-slot {
+  .chocolate-canvas-stage--editor-mobile .chocolate-canvas-shell--editor-slot,
+  .chocolate-canvas-stage--editor-mobile .chocolate-canvas-shell--mobile-slot {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -505,9 +505,8 @@
     overflow: hidden;
   }
 
-  .chocolate-canvas-stage--editor-mobile .chocolate-canvas--embedded-editor {
-    transform: scale(calc(100cqw / 925));
-    transform-origin: top left;
+  .chocolate-canvas-stage--editor-mobile .chocolate-canvas-shell--embedded {
+    overflow: hidden;
   }
 
   .chocolate-editor--mobile .chocolate-thumb-grid {
