@@ -1,7 +1,6 @@
 "use client";
 
-import { EDITOR_SCALE } from "@/data/chocolate-catalog";
-import { getCanvasFitScale } from "@/lib/chocolate-canvas-utils";
+import { CANVAS_W, EDITOR_SCALE } from "@/data/chocolate-catalog";
 import { useChocolateDragFromPanel } from "@/hooks/useChocolateDragFromPanel";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ChocolateSidebar } from "./Sidebar";
@@ -10,21 +9,21 @@ import "./chocolate-box.css";
 
 const MOBILE_MQ = "(max-width: 900px)";
 
-function readEditorScale(viewport: HTMLDivElement | null) {
-  if (!viewport) return EDITOR_SCALE;
+function readEditorScale(stage: HTMLDivElement | null) {
+  if (!stage) return EDITOR_SCALE;
   if (!window.matchMedia(MOBILE_MQ).matches) return EDITOR_SCALE;
-  const width = viewport.clientWidth;
+  const width = stage.clientWidth;
   if (width <= 0) return EDITOR_SCALE;
-  return getCanvasFitScale(width);
+  return width / CANVAS_W;
 }
 
 export function ChocolateEditor() {
-  const viewportRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(EDITOR_SCALE);
 
   const updateScale = useCallback(() => {
-    const next = readEditorScale(viewportRef.current);
+    const next = readEditorScale(stageRef.current);
     setScale((prev) => (Math.abs(prev - next) < 0.0001 ? prev : next));
   }, []);
 
@@ -36,7 +35,7 @@ export function ChocolateEditor() {
     updateScale();
     const mq = window.matchMedia(MOBILE_MQ);
     const ro = new ResizeObserver(updateScale);
-    if (viewportRef.current) ro.observe(viewportRef.current);
+    if (stageRef.current) ro.observe(stageRef.current);
     mq.addEventListener("change", updateScale);
     return () => {
       ro.disconnect();
@@ -60,8 +59,12 @@ export function ChocolateEditor() {
   return (
     <div className="chocolate-editor">
       <ChocolateSidebar onStartDrag={startDrag} />
-      <div className="chocolate-canvas-area chocolate-canvas-area--editor" ref={viewportRef}>
-        <div className="chocolate-canvas-stage chocolate-canvas-stage--editor">
+      <div className="chocolate-canvas-area chocolate-canvas-area--editor">
+        <div
+          ref={stageRef}
+          className="chocolate-canvas-stage chocolate-canvas-stage--editor"
+          style={{ "--chocolate-editor-scale": scale } as React.CSSProperties}
+        >
           <ChocolateCanvas scale={scale} embedded editorSlot canvasRef={canvasRef} />
         </div>
       </div>

@@ -37,6 +37,11 @@
   overflow: hidden;
 }
 
+.chocolate-canvas-stage--editor .chocolate-canvas--embedded-editor {
+  transform: scale(var(--chocolate-editor-scale, 0.559559));
+  transform-origin: top left;
+}
+
 .chocolate-sidebar {
   flex: 0 0 clamp(200px, 26vw, 240px);
   width: clamp(200px, 26vw, 240px);
@@ -480,10 +485,15 @@
   }
 
   .chocolate-canvas-stage--editor {
+    container-type: inline-size;
     width: 100%;
     max-width: 100%;
     height: auto;
     aspect-ratio: 925 / 715;
+  }
+
+  .chocolate-canvas-stage--editor .chocolate-canvas--embedded-editor {
+    transform: scale(calc(100cqw / 925));
   }
 
   .chocolate-thumb-grid {

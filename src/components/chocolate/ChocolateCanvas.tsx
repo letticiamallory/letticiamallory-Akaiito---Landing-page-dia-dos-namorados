@@ -126,11 +126,13 @@ export function ChocolateCanvas({
         onClick={() => editable && selectSlot(null)}
       >
         <div
-          className="chocolate-canvas chocolate-canvas--embedded"
+          className={`chocolate-canvas chocolate-canvas--embedded${
+            editorSlot ? " chocolate-canvas--embedded-editor" : ""
+          }`}
           style={{
             width: CANVAS_W,
             height: CANVAS_H,
-            transform: `scale(${scale})`,
+            ...(editorSlot ? {} : { transform: `scale(${scale})` }),
           }}
         >
           {canvasInner}
