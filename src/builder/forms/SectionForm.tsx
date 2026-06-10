@@ -15,6 +15,12 @@ import { HistoriaPolaroidControls } from "@/components/historia/historia-polaroi
 import { HistoriaChocolatesControls } from "@/components/historia/historia-chocolates-controls";
 import { HistoriaCartaControls } from "@/components/historia/historia-carta-controls";
 import { DEFAULT_LETTER, LETTER_MESSAGE_MAX_CHARS, clampLetterMessage } from "@/lib/letter-catalog";
+import {
+  clampCustomMessageBody,
+  clampCustomMessageCta,
+  CUSTOM_MESSAGE_BODY_MAX_CHARS,
+  CUSTOM_MESSAGE_CTA_MAX_CHARS,
+} from "@/lib/custom-message";
 import { normalizeMusicPageUrl, isYouTubeMusicUrl } from "@/lib/music-metadata";
 
 async function fetchTrackMetadataFromUrl(rawUrl: string) {
@@ -327,23 +333,23 @@ export function SectionForm({
         {section.sectionId === "custom_message" && (
           <>
             <SectionHint>
-              Aparece dentro do coração no card final: mensagem com efeito de digitação e assinatura.
+              Aparece dentro do coração no card final: mensagem curta com efeito de digitação e
+              assinatura.
             </SectionHint>
-            <TextAreaField
-              label="Mensagem final"
-              value={(d as { body: string }).body}
-              onChange={(v) => onChange({ body: v.slice(0, 400) })}
-              placeholder="Você é a melhor parte da minha história..."
-              required
-            />
-            <p className="text-xs text-[var(--text-dim)] -mt-3">
-              {((d as { body: string }).body || "").length}/400
-            </p>
             <Field
-              label="Assinatura (opcional)"
+              label={`Mensagem final (máx. ${CUSTOM_MESSAGE_BODY_MAX_CHARS})`}
+              value={(d as { body: string }).body}
+              onChange={(v) => onChange({ body: clampCustomMessageBody(v) })}
+              placeholder="Te amo para sempre"
+              required
+              maxLength={CUSTOM_MESSAGE_BODY_MAX_CHARS}
+            />
+            <Field
+              label={`Assinatura (opcional, máx. ${CUSTOM_MESSAGE_CTA_MAX_CHARS})`}
               value={(d as { ctaText?: string }).ctaText || ""}
-              onChange={(v) => onChange({ ctaText: v.slice(0, 48) })}
+              onChange={(v) => onChange({ ctaText: clampCustomMessageCta(v) })}
               placeholder="Te amo ♡"
+              maxLength={CUSTOM_MESSAGE_CTA_MAX_CHARS}
             />
           </>
         )}

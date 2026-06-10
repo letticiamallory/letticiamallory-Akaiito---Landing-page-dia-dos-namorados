@@ -6,7 +6,7 @@ import { MockupShell } from "../MockupShell";
 
 const DEMO_DATA: CustomMessageData = {
   title: "Para sempre",
-  body: "Obrigado por fazer parte da minha história.",
+  body: "Obrigado por tudo",
   ctaText: "Te amo ♡",
 };
 

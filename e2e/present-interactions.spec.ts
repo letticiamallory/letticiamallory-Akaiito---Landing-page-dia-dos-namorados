@@ -13,7 +13,7 @@ test.describe("Interações do presente demo", () => {
     await expect(page.locator("#card-letter .envelope-gift-scene--open").first()).toBeVisible({
       timeout: 10_000,
     });
-    await expect(page.getByText(/Querida João/i)).toBeVisible();
+    await expect(page.getByText(/Letticia, você é a pessoa mais incrível/i)).toBeVisible();
   });
 
   test("abre caixa de bombons e mantém mordida após scroll", async ({ page }) => {

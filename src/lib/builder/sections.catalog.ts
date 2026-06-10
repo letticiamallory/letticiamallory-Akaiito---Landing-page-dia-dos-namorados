@@ -157,7 +157,7 @@ export function defaultSectionData(sectionId: SectionId): SectionData {
     case "custom_message":
       return {
         title: "Para sempre",
-        body: "Você é a melhor parte da minha história. Obrigado por cada momento ao seu lado.",
+        body: "Te amo para sempre",
         ctaText: "Te amo ♡",
       };
   }

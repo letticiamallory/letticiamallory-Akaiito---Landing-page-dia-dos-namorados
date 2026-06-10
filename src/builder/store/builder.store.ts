@@ -6,6 +6,7 @@ import { createBuilderPersistStorage } from "@/lib/builder-persist-storage";
 import { nanoid } from "nanoid";
 import type {
   BuilderSection,
+  CustomMessageData,
   HeroCoupleData,
   LoveLetterData,
   MuseumOfUsData,
@@ -15,6 +16,7 @@ import type {
 import type { BouquetConfig } from "@/lib/bouquet-catalog";
 import { DEFAULT_BOUQUET } from "@/lib/bouquet-catalog";
 import { DEFAULT_LETTER } from "@/lib/letter-catalog";
+import { clampCustomMessageBody, clampCustomMessageCta } from "@/lib/custom-message";
 import {
   HERO_PHOTO_STORAGE_FIX,
   normalizeHeroPhotoForStore,
@@ -142,6 +144,17 @@ function migrateSections(sections: BuilderSection[]): BuilderSection[] {
       return {
         ...s,
         data: { ...data, backgroundPhoto, bouquet } as SectionData,
+      };
+    }
+
+    if (s.sectionId === "custom_message") {
+      const data = s.data as CustomMessageData;
+      const body = clampCustomMessageBody(data.body ?? "");
+      const ctaText = data.ctaText ? clampCustomMessageCta(data.ctaText) : data.ctaText;
+      if (body === data.body && ctaText === data.ctaText) return s;
+      return {
+        ...s,
+        data: { ...data, body, ctaText },
       };
     }
 

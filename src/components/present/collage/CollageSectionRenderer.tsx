@@ -14,6 +14,7 @@ import type {
   PhotoCollageData,
   PolaroidCameraData,
 } from "@/lib/builder/types";
+import { clampCustomMessageBody, clampCustomMessageCta } from "@/lib/custom-message";
 import { buildCalendarMonth, collageRotation, yearsTogether } from "@/lib/collage-utils";
 import { useRelationshipCounter } from "@/hooks/useHistoriaPage";
 import { useCollageReveal } from "@/hooks/useCollageReveal";
@@ -374,6 +375,8 @@ export function CollageIntegratedObject({
 export function CollageFinalSection({ data }: { data: CustomMessageData }) {
   const { ref, visible, className } = useCollageReveal();
   const [len, setLen] = useState(0);
+  const body = clampCustomMessageBody(data.body);
+  const ctaText = data.ctaText ? clampCustomMessageCta(data.ctaText) : data.ctaText;
 
   useEffect(() => {
     if (!visible) return;
@@ -382,19 +385,19 @@ export function CollageFinalSection({ data }: { data: CustomMessageData }) {
     const id = window.setInterval(() => {
       i += 1;
       setLen(i);
-      if (i >= data.body.length) window.clearInterval(id);
+      if (i >= body.length) window.clearInterval(id);
     }, 28);
     return () => window.clearInterval(id);
-  }, [visible, data.body]);
+  }, [visible, body]);
 
-  if (!data.body.trim()) return null;
+  if (!body.trim()) return null;
 
   return (
     <div className="collage-zone">
       <div ref={ref} className={`collage-final ${className} collage-reveal--counter`}>
         {data.title && <h2 className="collage-final__title">{data.title}</h2>}
-        <p className="collage-final__body">{data.body.slice(0, len)}</p>
-        {data.ctaText && <span className="collage-final__cta">{data.ctaText}</span>}
+        <p className="collage-final__body">{body.slice(0, len)}</p>
+        {ctaText && <span className="collage-final__cta">{ctaText}</span>}
       </div>
     </div>
   );
